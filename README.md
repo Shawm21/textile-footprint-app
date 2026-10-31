@@ -1,3 +1,5 @@
+# THIS PROJECT IS DONE BY ME FOR A BUTEX STUDENTS UNIVERSITY PROJECT, THE DATA COLLECTED AND FORMULAS PROVIDED AND IDEA OF THIS PROJECT WAS ALL THEIRS AND I GAVE IT A LOOK.
+
 # Textile Carbon & Water Footprint Assessment System
 
 An enterprise-grade Life Cycle Assessment (LCA) calculation engine and sustainability management platform engineered for composite textile mills, spinning facilities, dye houses, printing operations, and apparel garment manufacturers.
@@ -95,25 +97,7 @@ The calculator features modular, independently toggleable process segments:
 
 ---
 
-## 4. Local Execution & Deployment
-
-Prerequisites:
-- Node.js (version 18 or higher)
-
-Run locally:
-```bash
-node server.js
-```
-The server will bind to http://127.0.0.1:8080.
-
-Deploy to Vercel:
-```bash
-npx vercel --prod
-```
-
----
-
-## 5. Formal Methodology Reference Report
+## 4. Formal Methodology Reference Report
 
 A comprehensive 6-section methodology whitepaper with complete mathematical proofs, mass-balance formulations, and emission factor tables is included in this repository:
 - Word Document: Textile_LCA_Methodology_Report.docx
