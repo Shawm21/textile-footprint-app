@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results &amp; Analytics - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link active">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 class="page-title">Lifecycle Footprint Assessment Results</h1>
+                <p class="page-subtitle" id="calcSubtitle">Comprehensive greenhouse gas and water balance report for manufactured fabric.</p>
+            </div>
+            <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+                <a href="Textile_LCA_Methodology_Report.docx" download="Textile_LCA_Methodology_Report.docx" class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
+                    Download Methodology (.docx)
+                </a>
+                <button type="button" class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+                <button type="button" class="btn-primary" onclick="window.print()">Print / PDF</button>
+            </div>
+        </div>
+
+        <!-- SAVE ORDER TO PROFILE DATABASE BANNER -->
+        <div class="card" style="border-left: 4px solid #0891b2; background: #ecfeff; padding: 1.1rem 1.4rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="margin: 0; color: #0891b2; font-size: 1.05rem;">Save Order to Profile Database</h3>
+                    <p style="margin: 0.2rem 0 0; font-size: 0.85rem; color: #155e75;">
+                        Store this assessment under your user profile database to reload, review, or export anytime.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="orderPONumber" placeholder="PO / Batch # (e.g. PO-9821)" style="padding: 0.5rem 0.7rem; border: 1px solid #a5f3fc; border-radius: 4px; font-size: 0.88rem; width: 180px;">
+                    <button type="button" class="btn-primary" onclick="handleSaveOrderToProfile()" style="padding: 0.52rem 1rem; font-size: 0.88rem;">
+                        Save to Database
+                    </button>
+                    <a href="profile.html" class="btn-secondary" style="padding: 0.52rem 0.9rem; font-size: 0.88rem;">
+                        View Saved Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. EXECUTIVE KPI SUMMARY TILES -->
+        <div class="results-kpi-grid">
+            <div class="kpi-card kpi-carbon">
+                <div class="kpi-title">Total Carbon Footprint</div>
+                <div class="kpi-value" id="totalCarbon">0</div>
+                <div class="kpi-unit">kg CO₂e</div>
+                <div class="kpi-intensity" id="carbonPerKg">0.0 kg CO₂e / kg fabric</div>
+            </div>
+
+            <div class="kpi-card kpi-water">
+                <div class="kpi-title">Total Water Footprint</div>
+                <div class="kpi-value" id="totalWater">0</div>
+                <div class="kpi-unit">Litres (L)</div>
+                <div class="kpi-intensity" id="waterPerKg">0.0 L / kg fabric</div>
+            </div>
+
+            <div class="kpi-card kpi-fresh">
+                <div class="kpi-title">Freshwater Consumed</div>
+                <div class="kpi-value" id="totalFreshWater">0</div>
+                <div class="kpi-unit">Litres (Municipal/Borewell)</div>
+                <div class="kpi-intensity">Net Depletion Impact</div>
+            </div>
+
+            <div class="kpi-card kpi-saved">
+                <div class="kpi-title">Water Saved &amp; Recycled</div>
+                <div class="kpi-value" id="totalSavedWater">0</div>
+                <div class="kpi-unit">Litres (Rain + Recycled)</div>
+                <div class="kpi-intensity" style="color: #0891b2;">Circular Water Conservation</div>
+            </div>
+
+            <div class="kpi-card kpi-renew">
+                <div class="kpi-title">Carbon Avoided (Renewables)</div>
+                <div class="kpi-value" id="carbonSavedRenewable">0</div>
+                <div class="kpi-unit">kg CO₂e Saved</div>
+                <div class="kpi-intensity" style="color: #6a1b9a;">Clean Power Substitution</div>
+            </div>
+        </div>
+
+        <!-- 2. STAGE BREAKDOWN TABLE -->
+        <section class="card">
+            <div class="card-header-styled">
+                <h2><span>Comprehensive Stage-by-Stage Breakdown</span></h2>
+                <span class="badge-tag">Process Chain</span>
+            </div>
+            <p class="section-desc">Carbon and water distribution across each manufacturing tier (Raw materials excluded per project scope).</p>
+
+            <table class="data-table" id="breakdownTable">
+                <thead>
+                    <tr>
+                        <th>Manufacturing Stage</th>
+                        <th>Carbon (kg CO₂e)</th>
+                        <th>Carbon Share (%)</th>
+                        <th>Water (L)</th>
+                        <th>Water Share (%)</th>
+                        <th>Key Drivers</th>
+                    </tr>
+                </thead>
+                <tbody id="breakdownBody"></tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td><strong>TOTAL ASSESSMENT</strong></td>
+                        <td id="tfoot-carbon"><strong>0</strong></td>
+                        <td><strong>100%</strong></td>
+                        <td id="tfoot-water"><strong>0</strong></td>
+                        <td><strong>100%</strong></td>
+                        <td><strong>Combined Facility Footprint</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <!-- 3. VISUAL BAR CHARTS -->
+        <section class="card">
+            <div class="card-header-styled">
+                <h2><span>Carbon Intensity Distribution by Stage</span></h2>
+                <span class="badge-tag">kg CO₂e</span>
+            </div>
+            <div class="chart-container" id="carbonChart"></div>
+
+            <div class="card-header-styled" style="margin-top: 1.5rem;">
+                <h2><span>Water Consumption Distribution by Stage</span></h2>
+                <span class="badge-tag badge-blue">Litres</span>
+            </div>
+            <div class="chart-container" id="waterChart"></div>
+        </section>
+
+        <!-- 4. UTILITIES & WATER SOURCE BALANCES -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.2rem;">
+            <section class="card">
+                <div class="card-header-styled">
+                    <h2><span>Energy Source Distribution</span></h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Consumption (kWh)</th>
+                            <th>Emissions (kg CO₂e)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="energyBreakdownBody"></tbody>
+                </table>
+            </section>
+
+            <section class="card">
+                <div class="card-header-styled">
+                    <h2><span>Water Source Balance</span></h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Water Source</th>
+                            <th>Volume (Litres)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="waterSourceBody"></tbody>
+                </table>
+            </section>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="page-nav-actions" style="margin-top: 2rem;">
+            <div>
+                <a href="index.html" class="btn-secondary">&larr; Start New / Edit Order</a>
+            </div>
+            <div>
+                <a href="chemicals.html" class="btn-primary">Manage Chemical Library &rarr;</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>ISO 14040/44 compatible lifecycle modeling. Results are estimates based on user mill data.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        let currentResults = null;
+
+        function formatNum(n, dec = 1) {
+            if (n === undefined || isNaN(n)) return '0';
+            if (Math.abs(n) >= 1000000) {
+                return (n / 1000000).toFixed(2) + 'M';
+            }
+            return n.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+        }
+
+        function renderResultsUI() {
+            // Get or calculate results
+            currentResults = getLastCalculationResults();
+            if (!currentResults) {
+                currentResults = calculateProjectFootprint();
+            }
+
+            const r = currentResults;
+            const pw = r.prodWeight || 1000;
+
+            document.getElementById('calcSubtitle').textContent = 
+                `LCA Report for ${formatNum(pw, 0)} kg of ${r.fabricType.toUpperCase()} fabric (${r.weaveType.toUpperCase()}). Calculated on ${new Date(r.calcDate || Date.now()).toLocaleDateString()}.`;
+
+            // Executive KPIs
+            document.getElementById('totalCarbon').textContent = formatNum(r.totalCarbon, 1);
+            document.getElementById('totalWater').textContent = formatNum(r.totalWater, 0);
+            document.getElementById('carbonPerKg').textContent = `${formatNum(r.carbonPerKg, 2)} kg CO₂e / kg fabric`;
+            document.getElementById('waterPerKg').textContent = `${formatNum(r.waterPerKg, 1)} L / kg fabric`;
+            document.getElementById('totalFreshWater').textContent = formatNum(r.totalFreshWater, 0);
+            document.getElementById('totalSavedWater').textContent = formatNum(r.totalSavedWater, 0);
+            document.getElementById('carbonSavedRenewable').textContent = formatNum(r.carbonSavedRenew, 1);
+
+            // 1. Stage Breakdown Table
+            const tbody = document.getElementById('breakdownBody');
+            tbody.innerHTML = '';
+            r.stages.forEach(s => {
+                const cp = r.totalCarbon > 0 ? ((s.carbon / r.totalCarbon) * 100).toFixed(1) : '0.0';
+                const wp = r.totalWater > 0 ? ((s.water / r.totalWater) * 100).toFixed(1) : '0.0';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${s.name}</strong></td>
+                    <td>${formatNum(s.carbon, 1)}</td>
+                    <td><span class="badge-tag">${cp}%</span></td>
+                    <td>${formatNum(s.water, 0)}</td>
+                    <td><span class="badge-tag badge-blue">${wp}%</span></td>
+                    <td style="font-size: 0.8rem; color: #666;">${s.details || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('tfoot-carbon').innerHTML = `<strong>${formatNum(r.totalCarbon, 1)}</strong>`;
+            document.getElementById('tfoot-water').innerHTML = `<strong>${formatNum(r.totalWater, 0)}</strong>`;
+
+            // 2. Energy Breakdown
+            const energyBody = document.getElementById('energyBreakdownBody');
+            energyBody.innerHTML = '';
+            let totalKwh = 0, totalEnergyC = 0;
+            (r.energySources || []).forEach(e => {
+                totalKwh += e.kwh;
+                totalEnergyC += e.carbon;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${e.name}</td>
+                    <td>${formatNum(e.kwh, 0)}</td>
+                    <td>${formatNum(e.carbon, 1)}</td>
+                `;
+                energyBody.appendChild(tr);
+            });
+            const trEnergyTotal = document.createElement('tr');
+            trEnergyTotal.className = 'total-row';
+            trEnergyTotal.innerHTML = `
+                <td><strong>Total Energy</strong></td>
+                <td><strong>${formatNum(totalKwh, 0)}</strong></td>
+                <td><strong>${formatNum(totalEnergyC, 1)}</strong></td>
+            `;
+            energyBody.appendChild(trEnergyTotal);
+
+            // 3. Water Balance
+            const waterBody = document.getElementById('waterSourceBody');
+            waterBody.innerHTML = '';
+            (r.waterSources || []).forEach(w => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${w.name}</td>
+                    <td>${formatNum(w.vol, 0)}</td>
+                `;
+                waterBody.appendChild(tr);
+            });
+            const trWaterTotal = document.createElement('tr');
+            trWaterTotal.className = 'total-row';
+            trWaterTotal.innerHTML = `
+                <td><strong>Total Process Water Used</strong></td>
+                <td><strong>${formatNum(r.totalWater, 0)}</strong></td>
+            `;
+            waterBody.appendChild(trWaterTotal);
+
+            // 4. Bar Charts
+            renderHorizontalChart('carbonChart', r.stages, 'carbon', 'carbon');
+            renderHorizontalChart('waterChart', r.stages.filter(s => s.water > 0), 'water', 'water');
+        }
+
+        function renderHorizontalChart(containerId, stages, field, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const maxVal = Math.max(...stages.map(s => s[field]), 1);
+
+            stages.forEach(s => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'chart-bar-wrapper';
+
+                const lbl = document.createElement('div');
+                lbl.className = 'chart-label';
+                lbl.title = s.name;
+                lbl.textContent = s.name;
+
+                const barBg = document.createElement('div');
+                barBg.className = 'chart-bar-bg';
+
+                const bar = document.createElement('div');
+                bar.className = `chart-bar ${type}`;
+                const pct = (s[field] / maxVal) * 100;
+                bar.style.width = '0%';
+                setTimeout(() => { bar.style.width = Math.max(pct, 1) + '%'; }, 60);
+
+                barBg.appendChild(bar);
+
+                const val = document.createElement('div');
+                val.className = 'chart-value';
+                val.textContent = `${formatNum(s[field], type === 'carbon' ? 1 : 0)} ${type === 'carbon' ? 'kg' : 'L'}`;
+
+                wrapper.appendChild(lbl);
+                wrapper.appendChild(barBg);
+                wrapper.appendChild(val);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function exportCSV() {
+            if (!currentResults) return;
+            const r = currentResults;
+            let csv = 'Textile Lifecycle Footprint Assessment Report\n\n';
+            csv += `Report Generated,${new Date().toISOString()}\n`;
+            csv += `Fabric Type,${r.fabricType}\n`;
+            csv += `Formation Method,${r.weaveType}\n`;
+            csv += `Finished Production Weight (kg),${r.prodWeight}\n\n`;
+
+            csv += `Total Carbon Footprint (kg CO2e),${r.totalCarbon.toFixed(2)}\n`;
+            csv += `Carbon Intensity (kg CO2e/kg fabric),${r.carbonPerKg.toFixed(3)}\n`;
+            csv += `Total Water Footprint (L),${r.totalWater.toFixed(0)}\n`;
+            csv += `Water Intensity (L/kg fabric),${r.waterPerKg.toFixed(1)}\n`;
+            csv += `Freshwater Consumed (L),${r.totalFreshWater.toFixed(0)}\n`;
+            csv += `Water Saved via Rain & Recycled (L),${r.totalSavedWater.toFixed(0)}\n`;
+            csv += `Carbon Avoided via Renewables (kg CO2e),${r.carbonSavedRenew.toFixed(2)}\n\n`;
+
+            csv += 'STAGE-BY-STAGE BREAKDOWN\n';
+            csv += 'Stage,Carbon (kg CO2e),Water (L),Details\n';
+            r.stages.forEach(s => {
+                csv += `"${s.name}",${s.carbon.toFixed(2)},${s.water.toFixed(0)},"${(s.details || '').replace(/"/g, '""')}"\n`;
+            });
+
+            csv += '\nENERGY PROFILE\n';
+            csv += 'Source,Consumption (kWh),Carbon (kg CO2e)\n';
+            (r.energySources || []).forEach(e => {
+                csv += `"${e.name}",${e.kwh.toFixed(0)},${e.carbon.toFixed(2)}\n`;
+            });
+
+            csv += '\nWATER BALANCE\n';
+            csv += 'Source,Volume (Litres)\n';
+            (r.waterSources || []).forEach(w => {
+                csv += `"${w.name}",${w.vol.toFixed(0)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Textile_LCA_Footprint_Report_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('CSV Report exported successfully!', 'success');
+        }
+
+        function handleSaveOrderToProfile() {
+            const poInput = document.getElementById('orderPONumber');
+            const po = poInput ? poInput.value.trim() : '';
+            const orderRecord = saveOrderToDB({
+                poNumber: po || undefined,
+                orderName: po ? `Order ${po}` : undefined
+            });
+            alert(`Order "${orderRecord.name}" successfully saved to your profile database!\n\nID: ${orderRecord.id}\nCarbon: ${orderRecord.totalCarbon.toFixed(1)} kg CO₂e\nWater: ${Math.round(orderRecord.totalWater)} L\n\nYou can review or reload it anytime from "My Orders & Profile".`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderResultsUI();
+        });
+    </script>
+</body>
+</html>

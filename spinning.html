@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning &amp; Yarn Dyeing - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link active">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Yarn Spinning &amp; Yarn Dyeing</h1>
+            <p class="page-subtitle">Configure mechanical fiber spinning, material efficiency, and package/hank yarn dyeing operations.</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">Spinning Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude spinning and yarn dyeing from the lifecycle footprint calculation.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle Spinning Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludeSpinning" checked onchange="handleSegmentToggle('includeSpinning', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentSpinning">
+            <!-- SECTION 1: Spinning Mill Energy -->
+            <section class="card" id="sec-spinning">
+                <div class="card-header-styled">
+                    <h2><span>Spinning Mill Energy Consumption</span></h2>
+                    <span class="badge-tag">Fiber to Yarn</span>
+                </div>
+                <p class="section-desc">Electricity and thermal energy used to convert staple fibers into wound yarn packages.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="spinGridKwh">Grid Electricity for Spinning (kWh)</label>
+                        <input type="number" id="spinGridKwh" value="800" min="0" step="1">
+                        <small>Blowroom, carding, drawing, roving, ring/rotor frames, winding</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="spinGasKwh">Natural Gas / Thermal Energy (kWh)</label>
+                        <input type="number" id="spinGasKwh" value="200" min="0" step="1">
+                        <small>Heating, steaming and mill climate air conditioning</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="spinRenewableKwh">Renewable Electricity for Spinning (kWh)</label>
+                        <input type="number" id="spinRenewableKwh" value="0" min="0" step="1">
+                        <small>On-site rooftop solar or dedicated captive wind generation</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="spinWater">Process Freshwater Used (L)</label>
+                        <input type="number" id="spinWater" value="500" min="0" step="1">
+                        <small>Yarn conditioning humidification and fiber spray</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Spinning Waste & Fiber Loss -->
+            <section class="card">
+                <div class="card-header-styled">
+                    <h2><span>Process Waste &amp; Fiber Loss</span></h2>
+                    <span class="badge-tag badge-blue">Material Efficiency</span>
+                </div>
+                <p class="section-desc">Pneumatic droppings, card waste, comber noils, and roving waste generated during spinning.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="spinWastePercent">Spinning Process Loss / Waste (%)</label>
+                        <input type="number" id="spinWastePercent" value="5" min="0" max="50" step="0.1">
+                        <small>Carded yarn: ~4-6%, Combed ring yarn: ~12-18%, Open-end rotor: ~3-5%</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: YARN DYEING (PLACED BELOW SPINNING PER REQUIREMENT) -->
+            <section class="card" id="sec-yarn-dyeing">
+                <div class="card-header-styled">
+                    <h2><span>Yarn Dyeing Process</span></h2>
+                    <label class="checkbox-label" style="font-weight: 600;">
+                        <input type="checkbox" id="chkYarnDyeing" onchange="toggleYarnDyeingSection()"> Enable Yarn Dyeing
+                    </label>
+                </div>
+                <p class="section-desc">Package, cone, hank or continuous warp dyeing before fabric formation with dyes, electrolytes and auxiliaries.</p>
+
+                <div id="yarnDyeDetails" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yarnDyeMethod">Yarn Dyeing Technology</label>
+                            <select id="yarnDyeMethod">
+                                <option value="package">Package / Cone Dyeing (Circulation Machine)</option>
+                                <option value="hank">Hank / Skein Dyeing (Cabinet / Arm)</option>
+                                <option value="beam">Beam Dyeing (Yarn Warp Beam)</option>
+                                <option value="slasher">Continuous Slasher / Indigo Warp Dyeing (Denim)</option>
+                                <option value="space">Space / Multicolour Yarn Dyeing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="yarnDyeClass">Yarn Dyestuff Category</label>
+                            <select id="yarnDyeClass">
+                                <option value="reactive">Reactive Dyes (Cotton / Rayon / Cellulosics)</option>
+                                <option value="disperse">Disperse Dyes (Polyester / Synthetic Yarns)</option>
+                                <option value="vat">Vat Dyes (Indigo / High Colorfastness Yarns)</option>
+                                <option value="acid">Acid Dyes (Wool / Polyamide Yarns)</option>
+                                <option value="cationic">Cationic / Basic Dyes (Acrylic Yarns)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yarnDyeLiquorRatio">Liquor Ratio (e.g. 8 for 1:8)</label>
+                            <input type="number" id="yarnDyeLiquorRatio" value="8" min="1" step="0.5">
+                            <small>Package dyeing typically 1:6 to 1:10; hank dyeing 1:15 to 1:20</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="yarnDyeNumWashes">Rinsing &amp; After-Wash Cycles</label>
+                            <input type="number" id="yarnDyeNumWashes" value="3" min="0" step="1">
+                        </div>
+                    </div>
+
+                    <h3>Yarn Dyeing Energy Consumption</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yarnDyeGridKwh">Grid Electricity (kWh)</label>
+                            <input type="number" id="yarnDyeGridKwh" value="350" min="0" step="1">
+                            <small>Circulation pumps, hydro-extractors, rapid dryers</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="yarnDyeGasKwh">Natural Gas / Boiler Steam (kWh)</label>
+                            <input type="number" id="yarnDyeGasKwh" value="1400" min="0" step="1">
+                            <small>Liquor heating, high-temp fixation, hot soaping</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="yarnDyeRenewableKwh">Renewable Electricity (kWh)</label>
+                            <input type="number" id="yarnDyeRenewableKwh" value="0" min="0" step="1">
+                        </div>
+                    </div>
+
+                    <h3>Yarn Dyeing Water Consumption</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yarnDyeWaterFresh">Freshwater (L)</label>
+                            <input type="number" id="yarnDyeWaterFresh" value="25000" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="yarnDyeWaterRecycled">Recycled Water (L)</label>
+                            <input type="number" id="yarnDyeWaterRecycled" value="0" min="0" step="1">
+                        </div>
+                    </div>
+
+                    <h3>Yarn Dyeing Chemicals &amp; Auxiliaries</h3>
+                    <p class="section-desc">
+                        Dyestuffs, electrolytes, leveling agents, and softeners. Select "Other" to input custom chemical names and save for future use.
+                    </p>
+
+                    <div id="yarnDyeChemContainer" class="chem-container"></div>
+                    <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('yarnDyeChemContainer', 'yarnDyeChem', { key: 'leveling_yarn', qty: 10, ef: 2.5 })">
+                        + Add Yarn Dyeing Chemical
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- DISABLED NOTIFICATION (WHEN STAGE IS SWITCHED OFF) -->
+        <div id="segmentDisabledNoticeSpinning" class="segment-disabled-notice" style="display: none;">
+            <h3>Spinning Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All spinning energy, fiber loss, and yarn dyeing are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate spinning emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions">
+            <div>
+                <a href="index.html" class="btn-secondary">&larr; Back to Production</a>
+            </div>
+            <div>
+                <a href="fabrication.html" class="btn-primary">
+                    Next: Fabrication (Weaving/Knitting) &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`Spinning stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentSpinning');
+            const notice = document.getElementById('segmentDisabledNoticeSpinning');
+            const toggleInput = document.getElementById('chkIncludeSpinning');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function toggleYarnDyeingSection() {
+            const isChecked = document.getElementById('chkYarnDyeing').checked;
+            document.getElementById('yarnDyeDetails').style.display = isChecked ? 'block' : 'none';
+            saveCurrentInputs();
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includeSpinning: document.getElementById('chkIncludeSpinning').checked,
+                spinGridKwh: parseFloat(document.getElementById('spinGridKwh').value) || 0,
+                spinGasKwh: parseFloat(document.getElementById('spinGasKwh').value) || 0,
+                spinRenewableKwh: parseFloat(document.getElementById('spinRenewableKwh').value) || 0,
+                spinWater: parseFloat(document.getElementById('spinWater').value) || 0,
+                spinWastePercent: parseFloat(document.getElementById('spinWastePercent').value) || 0,
+
+                chkYarnDyeing: document.getElementById('chkYarnDyeing').checked,
+                yarnDyeMethod: document.getElementById('yarnDyeMethod').value,
+                yarnDyeClass: document.getElementById('yarnDyeClass').value,
+                yarnDyeLiquorRatio: parseFloat(document.getElementById('yarnDyeLiquorRatio').value) || 8,
+                yarnDyeNumWashes: parseFloat(document.getElementById('yarnDyeNumWashes').value) || 3,
+                yarnDyeGridKwh: parseFloat(document.getElementById('yarnDyeGridKwh').value) || 0,
+                yarnDyeGasKwh: parseFloat(document.getElementById('yarnDyeGasKwh').value) || 0,
+                yarnDyeRenewableKwh: parseFloat(document.getElementById('yarnDyeRenewableKwh').value) || 0,
+                yarnDyeWaterFresh: parseFloat(document.getElementById('yarnDyeWaterFresh').value) || 0,
+                yarnDyeWaterRecycled: parseFloat(document.getElementById('yarnDyeWaterRecycled').value) || 0
+            });
+
+            syncChemRowData('yarnDyeChem');
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isSpinningOn = state.includeSpinning !== false;
+            updateSegmentUI(isSpinningOn);
+
+            document.getElementById('spinGridKwh').value = state.spinGridKwh !== undefined ? state.spinGridKwh : 800;
+            document.getElementById('spinGasKwh').value = state.spinGasKwh !== undefined ? state.spinGasKwh : 200;
+            document.getElementById('spinRenewableKwh').value = state.spinRenewableKwh !== undefined ? state.spinRenewableKwh : 0;
+            document.getElementById('spinWater').value = state.spinWater !== undefined ? state.spinWater : 500;
+            document.getElementById('spinWastePercent').value = state.spinWastePercent !== undefined ? state.spinWastePercent : 5;
+
+            // Yarn Dyeing inputs
+            const isYarnDyeOn = !!state.chkYarnDyeing;
+            document.getElementById('chkYarnDyeing').checked = isYarnDyeOn;
+            document.getElementById('yarnDyeDetails').style.display = isYarnDyeOn ? 'block' : 'none';
+            document.getElementById('yarnDyeMethod').value = state.yarnDyeMethod || 'package';
+            document.getElementById('yarnDyeClass').value = state.yarnDyeClass || 'reactive';
+            document.getElementById('yarnDyeLiquorRatio').value = state.yarnDyeLiquorRatio || 8;
+            document.getElementById('yarnDyeNumWashes').value = state.yarnDyeNumWashes !== undefined ? state.yarnDyeNumWashes : 3;
+            document.getElementById('yarnDyeGridKwh').value = state.yarnDyeGridKwh !== undefined ? state.yarnDyeGridKwh : 350;
+            document.getElementById('yarnDyeGasKwh').value = state.yarnDyeGasKwh !== undefined ? state.yarnDyeGasKwh : 1400;
+            document.getElementById('yarnDyeRenewableKwh').value = state.yarnDyeRenewableKwh || 0;
+            document.getElementById('yarnDyeWaterFresh').value = state.yarnDyeWaterFresh !== undefined ? state.yarnDyeWaterFresh : 25000;
+            document.getElementById('yarnDyeWaterRecycled').value = state.yarnDyeWaterRecycled || 0;
+
+            // Populate Yarn Dyeing Chemicals
+            const ydContainer = document.getElementById('yarnDyeChemContainer');
+            ydContainer.innerHTML = '';
+            const defaultYdChems = [
+                { key: 'salt_glauber', qty: 150, ef: 0.25 },
+                { key: 'reactive_dye_yarn', qty: 25, ef: 3.70 }
+            ];
+            (state.yarnDyeChems && state.yarnDyeChems.length > 0 ? state.yarnDyeChems : defaultYdChems).forEach(c => {
+                addChemRowToContainer('yarnDyeChemContainer', 'yarnDyeChem', c);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            document.querySelectorAll('input:not(.chem-qty):not(.chem-ef):not(.chem-custom-name), select:not(.chem-select)').forEach(el => {
+                el.addEventListener('input', saveCurrentInputs);
+                el.addEventListener('change', saveCurrentInputs);
+            });
+        });
+    </script>
+</body>
+</html>

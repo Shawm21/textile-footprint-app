@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Processing - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link active">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Wet Processing &amp; Chemical Finishing</h1>
+            <p class="page-subtitle">Configure pre-treatment, dyeing, and functional finishing processes in chronological order.</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">Wet Processing Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude pre-treatment, dyeing, and chemical finishing operations.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle Wet Processing Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludeWetProcessing" checked onchange="handleSegmentToggle('includeWetProcessing', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentWetProcessing">
+            <!-- STAGE: Pre-treatment -->
+            <section class="card" id="sec-pretreatment">
+                <div class="card-header-styled">
+                <h2><span>Pre-treatment (Desizing, Scouring, Bleaching, Mercerizing)</span></h2>
+                <span class="badge-tag">Preparation</span>
+            </div>
+            <p class="section-desc">Chemical and thermal wet preparation of grey fabric prior to printing and dyeing.</p>
+
+            <h3>Energy Requirements</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preGridKwh">Grid Electricity (kWh)</label>
+                    <input type="number" id="preGridKwh" value="400" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="preGasKwh">Natural Gas / Steam (kWh)</label>
+                    <input type="number" id="preGasKwh" value="2000" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="preRenewableKwh">Renewable Electricity (kWh)</label>
+                    <input type="number" id="preRenewableKwh" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Water Consumption by Source</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preWaterFresh">Freshwater (Municipal / Borewell) (L)</label>
+                    <input type="number" id="preWaterFresh" value="50000" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="preWaterRain">Harvested Rainwater (L)</label>
+                    <input type="number" id="preWaterRain" value="0" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="preWaterRecycled">Recycled Water (L)</label>
+                    <input type="number" id="preWaterRecycled" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Sub-processes Applied</h3>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" id="chkDesizing" checked> Desizing</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkScouring" checked> Scouring</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkBleaching" checked> Bleaching</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkMercerizing"> Mercerizing (Cotton)</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkHeatSetting"> Heat Setting (Polyester/Blend)</label>
+            </div>
+
+            <h3>Pre-treatment Chemicals</h3>
+            <div id="preChemContainer" class="chem-container"></div>
+            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('preChemContainer', 'preChem', { key: 'surfactant', qty: 10, ef: 2.0 })">
+                + Add Pre-treatment Chemical
+            </button>
+        </section>
+
+        <!-- STAGE: Dyeing -->
+        <section class="card" id="sec-dyeing">
+            <div class="card-header-styled">
+                <h2><span>Dyeing Process</span></h2>
+                <span class="badge-tag badge-blue">Coloration</span>
+            </div>
+            <p class="section-desc">Exhaust, continuous pad, or cold pad batch coloration with dyes, electrolytes, and fixing alkalis.</p>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dyeMethod">Dyeing Methodology</label>
+                    <select id="dyeMethod">
+                        <option value="exhaust">Exhaust Dyeing (Jet / Soft-Flow / Jigger)</option>
+                        <option value="continuous">Continuous Dyeing (Pad-Dry-Cure / Thermosol)</option>
+                        <option value="cold_pad">Cold Pad Batch (Low Energy)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dyeClass">Dye Class</label>
+                    <select id="dyeClass">
+                        <option value="reactive">Reactive Dyes (Cotton / Cellulosics)</option>
+                        <option value="disperse">Disperse Dyes (Polyester / Synthetics)</option>
+                        <option value="vat">Vat Dyes</option>
+                        <option value="direct">Direct Dyes</option>
+                        <option value="sulfur">Sulfur Dyes</option>
+                        <option value="pigment">Pigment</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dyeLiquorRatio">Liquor Ratio (e.g. 8 for 1:8)</label>
+                    <input type="number" id="dyeLiquorRatio" value="8" min="1" step="0.5">
+                    <small>Lower liquor ratio significantly cuts water and steam demand</small>
+                </div>
+                <div class="form-group">
+                    <label for="dyeNumWashes">After-Wash Cycles</label>
+                    <input type="number" id="dyeNumWashes" value="4" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Energy Requirements</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dyeGridKwh">Grid Electricity (kWh)</label>
+                    <input type="number" id="dyeGridKwh" value="600" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="dyeGasKwh">Natural Gas / Steam (kWh)</label>
+                    <input type="number" id="dyeGasKwh" value="3000" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="dyeRenewableKwh">Renewable Electricity (kWh)</label>
+                    <input type="number" id="dyeRenewableKwh" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Water Consumption by Source</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dyeWaterFresh">Freshwater (L)</label>
+                    <input type="number" id="dyeWaterFresh" value="80000" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="dyeWaterRain">Harvested Rainwater (L)</label>
+                    <input type="number" id="dyeWaterRain" value="0" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="dyeWaterRecycled">Recycled Water (L)</label>
+                    <input type="number" id="dyeWaterRecycled" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Dyes, Salts &amp; Auxiliary Chemicals</h3>
+            <div id="dyeChemContainer" class="chem-container"></div>
+            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('dyeChemContainer', 'dyeChem', { key: 'leveling_agent', qty: 10, ef: 2.5 })">
+                + Add Dye / Auxiliary Chemical
+            </button>
+        </section>
+
+        <!-- STAGE: Finishing -->
+        <section class="card" id="sec-finishing">
+            <div class="card-header-styled">
+                <h2><span>Chemical &amp; Mechanical Finishing</span></h2>
+                <span class="badge-tag">Final Quality</span>
+            </div>
+            <p class="section-desc">Applying performance softeners, water-repellency, anti-crease, flame retardancy, and stenter curing.</p>
+
+            <h3>Energy Requirements</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="finGridKwh">Grid Electricity (kWh)</label>
+                    <input type="number" id="finGridKwh" value="300" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="finGasKwh">Natural Gas / Stenter Heat (kWh)</label>
+                    <input type="number" id="finGasKwh" value="1500" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="finRenewableKwh">Renewable Electricity (kWh)</label>
+                    <input type="number" id="finRenewableKwh" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <!-- MECHANICAL FINISHING SUB-PROCESSES: PLACED DIRECTLY AFTER ELECTRICITY -->
+            <h3>Mechanical Finishing Sub-processes</h3>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" id="chkStentering" checked> Stentering / Heat Setting</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkCalendering"> Calendering</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkSanforizing"> Sanforizing / Compacting</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkBrushing"> Raising / Brushing</label>
+            </div>
+
+            <h3>Water Consumption</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="finWaterFresh">Freshwater (L)</label>
+                    <input type="number" id="finWaterFresh" value="20000" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="finWaterRain">Harvested Rainwater (L)</label>
+                    <input type="number" id="finWaterRain" value="0" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="finWaterRecycled">Recycled Water (L)</label>
+                    <input type="number" id="finWaterRecycled" value="0" min="0" step="1">
+                </div>
+            </div>
+
+            <h3>Functional Finishing Chemicals</h3>
+            <div id="finChemContainer" class="chem-container"></div>
+            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('finChemContainer', 'finChem', { key: 'water_repellent', qty: 15, ef: 8.5 })">
+                + Add Finishing Chemical
+            </button>
+        </section>
+        </div>
+
+        <!-- DISABLED NOTIFICATION (WHEN STAGE IS SWITCHED OFF) -->
+        <div id="segmentDisabledNoticeWetProcessing" class="segment-disabled-notice" style="display: none;">
+            <h3>Wet Processing Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All pre-treatment, fabric printing, dyeing, and chemical finishing emissions and water demand are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate wet processing emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions">
+            <div>
+                <a href="fabrication.html" class="btn-secondary">&larr; Back to Fabrication</a>
+            </div>
+            <div>
+                <a href="printing.html" class="btn-primary">
+                    Proceed to Printing &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`Wet Processing stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentWetProcessing');
+            const notice = document.getElementById('segmentDisabledNoticeWetProcessing');
+            const toggleInput = document.getElementById('chkIncludeWetProcessing');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includeWetProcessing: document.getElementById('chkIncludeWetProcessing').checked,
+                // Pretreatment
+                preGridKwh: parseFloat(document.getElementById('preGridKwh').value) || 0,
+                preGasKwh: parseFloat(document.getElementById('preGasKwh').value) || 0,
+                preRenewableKwh: parseFloat(document.getElementById('preRenewableKwh').value) || 0,
+                preWaterFresh: parseFloat(document.getElementById('preWaterFresh').value) || 0,
+                preWaterRain: parseFloat(document.getElementById('preWaterRain').value) || 0,
+                preWaterRecycled: parseFloat(document.getElementById('preWaterRecycled').value) || 0,
+                chkDesizing: document.getElementById('chkDesizing').checked,
+                chkScouring: document.getElementById('chkScouring').checked,
+                chkBleaching: document.getElementById('chkBleaching').checked,
+                chkMercerizing: document.getElementById('chkMercerizing').checked,
+                chkHeatSetting: document.getElementById('chkHeatSetting').checked,
+
+                // Dyeing
+                dyeMethod: document.getElementById('dyeMethod').value,
+                dyeClass: document.getElementById('dyeClass').value,
+                dyeLiquorRatio: parseFloat(document.getElementById('dyeLiquorRatio').value) || 8,
+                dyeNumWashes: parseFloat(document.getElementById('dyeNumWashes').value) || 4,
+                dyeGridKwh: parseFloat(document.getElementById('dyeGridKwh').value) || 0,
+                dyeGasKwh: parseFloat(document.getElementById('dyeGasKwh').value) || 0,
+                dyeRenewableKwh: parseFloat(document.getElementById('dyeRenewableKwh').value) || 0,
+                dyeWaterFresh: parseFloat(document.getElementById('dyeWaterFresh').value) || 0,
+                dyeWaterRain: parseFloat(document.getElementById('dyeWaterRain').value) || 0,
+                dyeWaterRecycled: parseFloat(document.getElementById('dyeWaterRecycled').value) || 0,
+
+                // Finishing
+                finGridKwh: parseFloat(document.getElementById('finGridKwh').value) || 0,
+                finGasKwh: parseFloat(document.getElementById('finGasKwh').value) || 0,
+                finRenewableKwh: parseFloat(document.getElementById('finRenewableKwh').value) || 0,
+                finWaterFresh: parseFloat(document.getElementById('finWaterFresh').value) || 0,
+                finWaterRain: parseFloat(document.getElementById('finWaterRain').value) || 0,
+                finWaterRecycled: parseFloat(document.getElementById('finWaterRecycled').value) || 0,
+                chkStentering: document.getElementById('chkStentering').checked,
+                chkCalendering: document.getElementById('chkCalendering').checked,
+                chkSanforizing: document.getElementById('chkSanforizing').checked,
+                chkBrushing: document.getElementById('chkBrushing').checked
+            });
+
+            syncChemRowData('preChem');
+            syncChemRowData('dyeChem');
+            syncChemRowData('finChem');
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isWetOn = state.includeWetProcessing !== false;
+            updateSegmentUI(isWetOn);
+
+            // Pretreatment
+            document.getElementById('preGridKwh').value = state.preGridKwh !== undefined ? state.preGridKwh : 400;
+            document.getElementById('preGasKwh').value = state.preGasKwh !== undefined ? state.preGasKwh : 2000;
+            document.getElementById('preRenewableKwh').value = state.preRenewableKwh !== undefined ? state.preRenewableKwh : 0;
+            document.getElementById('preWaterFresh').value = state.preWaterFresh !== undefined ? state.preWaterFresh : 50000;
+            document.getElementById('preWaterRain').value = state.preWaterRain !== undefined ? state.preWaterRain : 0;
+            document.getElementById('preWaterRecycled').value = state.preWaterRecycled !== undefined ? state.preWaterRecycled : 0;
+            document.getElementById('chkDesizing').checked = !!state.chkDesizing;
+            document.getElementById('chkScouring').checked = !!state.chkScouring;
+            document.getElementById('chkBleaching').checked = !!state.chkBleaching;
+            document.getElementById('chkMercerizing').checked = !!state.chkMercerizing;
+            document.getElementById('chkHeatSetting').checked = !!state.chkHeatSetting;
+
+            // Dyeing
+            document.getElementById('dyeMethod').value = state.dyeMethod || 'exhaust';
+            document.getElementById('dyeClass').value = state.dyeClass || 'reactive';
+            document.getElementById('dyeLiquorRatio').value = state.dyeLiquorRatio || 8;
+            document.getElementById('dyeNumWashes').value = state.dyeNumWashes || 4;
+            document.getElementById('dyeGridKwh').value = state.dyeGridKwh !== undefined ? state.dyeGridKwh : 600;
+            document.getElementById('dyeGasKwh').value = state.dyeGasKwh !== undefined ? state.dyeGasKwh : 3000;
+            document.getElementById('dyeRenewableKwh').value = state.dyeRenewableKwh !== undefined ? state.dyeRenewableKwh : 0;
+            document.getElementById('dyeWaterFresh').value = state.dyeWaterFresh !== undefined ? state.dyeWaterFresh : 80000;
+            document.getElementById('dyeWaterRain').value = state.dyeWaterRain !== undefined ? state.dyeWaterRain : 0;
+            document.getElementById('dyeWaterRecycled').value = state.dyeWaterRecycled !== undefined ? state.dyeWaterRecycled : 0;
+
+            // Finishing
+            document.getElementById('finGridKwh').value = state.finGridKwh !== undefined ? state.finGridKwh : 300;
+            document.getElementById('finGasKwh').value = state.finGasKwh !== undefined ? state.finGasKwh : 1500;
+            document.getElementById('finRenewableKwh').value = state.finRenewableKwh !== undefined ? state.finRenewableKwh : 0;
+            document.getElementById('finWaterFresh').value = state.finWaterFresh !== undefined ? state.finWaterFresh : 20000;
+            document.getElementById('finWaterRain').value = state.finWaterRain !== undefined ? state.finWaterRain : 0;
+            document.getElementById('finWaterRecycled').value = state.finWaterRecycled !== undefined ? state.finWaterRecycled : 0;
+            document.getElementById('chkStentering').checked = !!state.chkStentering;
+            document.getElementById('chkCalendering').checked = !!state.chkCalendering;
+            document.getElementById('chkSanforizing').checked = !!state.chkSanforizing;
+            document.getElementById('chkBrushing').checked = !!state.chkBrushing;
+
+            // Populate Chemicals
+            const preContainer = document.getElementById('preChemContainer');
+            preContainer.innerHTML = '';
+            (state.preChems || [{ key: 'naoh', qty: 30, ef: 1.2 }, { key: 'h2o2', qty: 25, ef: 0.8 }]).forEach(c => {
+                addChemRowToContainer('preChemContainer', 'preChem', c);
+            });
+
+            const dyeContainer = document.getElementById('dyeChemContainer');
+            dyeContainer.innerHTML = '';
+            (state.dyeChems || [{ key: 'reactive_dye', qty: 40, ef: 3.7 }, { key: 'salt', qty: 500, ef: 0.23 }]).forEach(c => {
+                addChemRowToContainer('dyeChemContainer', 'dyeChem', c);
+            });
+
+            const finContainer = document.getElementById('finChemContainer');
+            finContainer.innerHTML = '';
+            (state.finChems || [{ key: 'softener', qty: 15, ef: 4.0 }]).forEach(c => {
+                addChemRowToContainer('finChemContainer', 'finChem', c);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            document.querySelectorAll('input:not(.chem-qty):not(.chem-ef):not(.chem-custom-name), select:not(.chem-select)').forEach(el => {
+                el.addEventListener('input', saveCurrentInputs);
+                el.addEventListener('change', saveCurrentInputs);
+            });
+        });
+    </script>
+</body>
+</html>

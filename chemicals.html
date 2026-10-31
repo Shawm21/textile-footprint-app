@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Library - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link active">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 class="page-title">Custom Chemical Database &amp; Emission Factors</h1>
+                <p class="page-subtitle">Manage standard and user-saved chemicals for Weaving Sizing, Wet Processing, Garments Washing, Garments Printing, and ETP.</p>
+            </div>
+            <div>
+                <a href="index.html" class="btn-primary">&larr; Return to Calculator</a>
+            </div>
+        </div>
+
+        <!-- ADD NEW CUSTOM CHEMICAL CARD -->
+        <section class="card" style="border-left: 4px solid var(--accent-amber);">
+            <div class="card-header-styled">
+                <h2><span>Add New Custom Chemical to Library</span></h2>
+                <span class="badge-tag badge-amber">Persistent Library</span>
+            </div>
+            <p class="section-desc">
+                Custom chemicals saved here will automatically appear in chemical dropdowns across all stages (Weaving, Wet Processing, Garments, and ETP).
+            </p>
+
+            <form id="newChemForm" onsubmit="handleAddNewChemical(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newChemCategory">Process Stage / Category</label>
+                        <select id="newChemCategory" required>
+                            <option value="yarnDyeChem">Yarn Dyeing (Dyes, Leveling, Softeners)</option>
+                            <option value="weaving">Weaving (Sizing Chemicals)</option>
+                            <option value="preChem">Pre-treatment (Scour/Bleach)</option>
+                            <option value="printChem">Printing (Inks, Binders &amp; Pastes)</option>
+                            <option value="dyeChem">Dyeing (Dyes &amp; Auxiliaries)</option>
+                            <option value="finChem">Finishing (Performance Finishes)</option>
+                            <option value="garmentChem">Garment Manufacturing (Washing Auxiliaries &amp; Enzymes)</option>
+                            <option value="garmentPrintChem">Garment Printing (Inks, Plastisol &amp; DTG)</option>
+                            <option value="etpChem">Wastewater Treatment (ETP Coagulants/Flocculants)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newChemName">Chemical Name</label>
+                        <input type="text" id="newChemName" placeholder="e.g. Bio-based Modified Dextrin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newChemEF">Emission Factor (kg CO₂e / kg)</label>
+                        <input type="number" id="newChemEF" value="1.50" min="0" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newChemDesc">Description / Supplier Note (Optional)</label>
+                        <input type="text" id="newChemDesc" placeholder="e.g. Eco-friendly alternative sizing agent with reduced COD">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 0.5rem;">
+                    Save Chemical to Library
+                </button>
+            </form>
+        </section>
+
+        <!-- CHEMICAL EXPLORER & FILTER TABS -->
+        <section class="card">
+            <div class="card-header-styled">
+                <h2><span>Registered Chemical Directory</span></h2>
+                <span class="badge-tag" id="totalChemsCount">0 Chemicals</span>
+            </div>
+
+            <!-- Category filter buttons -->
+            <div class="lib-filter-tabs">
+                <button type="button" class="lib-tab-btn active" onclick="filterCategory('all', this)">All Categories</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('yarnDyeChem', this)">Yarn Dyeing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('weaving', this)">Weaving Sizing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('preChem', this)">Pre-treatment</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('printChem', this)">Printing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('dyeChem', this)">Dyeing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('finChem', this)">Finishing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('garmentChem', this)">Garments Washing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('garmentPrintChem', this)">Garment Printing</button>
+                <button type="button" class="lib-tab-btn" onclick="filterCategory('etpChem', this)">ETP Wastewater</button>
+            </div>
+
+            <!-- Chemical Cards Grid -->
+            <div id="chemCardsGrid" class="chem-card-grid"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Custom chemicals are saved in local browser storage and persist across sessions.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        const categoryLabels = {
+            yarnDyeChem: 'Yarn Dyeing',
+            weaving: 'Weaving Sizing',
+            preChem: 'Pre-treatment',
+            printChem: 'Printing',
+            dyeChem: 'Dyeing',
+            finChem: 'Finishing',
+            garmentChem: 'Garments Washing',
+            garmentPrintChem: 'Garment Printing',
+            etpChem: 'ETP Wastewater'
+        };
+
+        function filterCategory(cat, btn) {
+            currentFilter = cat;
+            document.querySelectorAll('.lib-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderChemicalCards();
+        }
+
+        function handleAddNewChemical(e) {
+            e.preventDefault();
+            const category = document.getElementById('newChemCategory').value;
+            const name = document.getElementById('newChemName').value.trim();
+            const ef = parseFloat(document.getElementById('newChemEF').value) || 1.0;
+            const desc = document.getElementById('newChemDesc').value.trim();
+
+            if (!name) {
+                showToast('Please enter a chemical name.', 'warning');
+                return;
+            }
+
+            const saved = saveCustomChemical(category, null, name, ef, desc);
+            if (saved) {
+                showToast(`"${name}" saved to ${categoryLabels[category]} library!`, 'success');
+                document.getElementById('newChemName').value = '';
+                document.getElementById('newChemDesc').value = '';
+                renderChemicalCards();
+            } else {
+                showToast('Could not save chemical.', 'warning');
+            }
+        }
+
+        function removeCustomChem(category, key, name) {
+            if (confirm(`Remove custom chemical "${name}" from your library?`)) {
+                if (deleteCustomChemical(category, key)) {
+                    showToast(`Removed "${name}" from library.`, 'info');
+                    renderChemicalCards();
+                }
+            }
+        }
+
+        function renderChemicalCards() {
+            const grid = document.getElementById('chemCardsGrid');
+            grid.innerHTML = '';
+
+            const categoriesToInspect = currentFilter === 'all' 
+                ? ['weaving', 'preChem', 'printChem', 'dyeChem', 'finChem', 'garmentChem', 'etpChem']
+                : [currentFilter];
+
+            let count = 0;
+
+            categoriesToInspect.forEach(cat => {
+                const lib = getChemicalLibrary(cat);
+                const standardKeys = Object.keys(DEFAULT_CHEMICALS[cat] || {}).filter(k => k !== 'custom');
+                const customChems = getCustomChemicals(cat);
+
+                // Render standard chemicals
+                standardKeys.forEach(k => {
+                    const chem = lib[k];
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = 'chem-item-card is-standard';
+                    card.innerHTML = `
+                        <div>
+                            <div class="chem-card-header">
+                                <span class="chem-card-title">${chem.name}</span>
+                                <span class="badge-tag">Standard</span>
+                            </div>
+                            <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                                Category: <strong>${categoryLabels[cat]}</strong>
+                            </div>
+                            <p class="chem-card-desc">${chem.desc || 'Standard textile chemical factor'}</p>
+                        </div>
+                        <div class="chem-card-footer">
+                            <span class="chem-ef-pill">${chem.ef} kg CO₂e / kg</span>
+                            <span style="font-size: 0.72rem; color: #888;">Default EF</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // Render user-saved custom chemicals
+                Object.keys(customChems).forEach(k => {
+                    const chem = customChems[k];
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = 'chem-item-card is-custom';
+                    card.innerHTML = `
+                        <div>
+                            <div class="chem-card-header">
+                                <span class="chem-card-title">⭐ ${chem.name}</span>
+                                <span class="badge-tag badge-amber">Custom Saved</span>
+                            </div>
+                            <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                                Category: <strong>${categoryLabels[cat]}</strong>
+                            </div>
+                            <p class="chem-card-desc">${chem.desc || 'User custom chemical entry'}</p>
+                        </div>
+                        <div class="chem-card-footer">
+                            <span class="chem-ef-pill" style="background: #fff3e0; color: #e65100;">${chem.ef} kg CO₂e / kg</span>
+                            <button type="button" class="btn-del-chem" onclick="removeCustomChem('${cat}', '${k}', '${chem.name.replace(/'/g, "\\'")}')">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            });
+
+            document.getElementById('totalChemsCount').textContent = `${count} Chemicals Listed`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChemicalCards();
+        });
+    </script>
+</body>
+</html>

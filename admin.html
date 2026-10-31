@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Monitoring Console - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .admin-hero {
+            background: linear-gradient(135deg, #083344 0%, #0e7490 50%, #0891b2 100%);
+            color: #fff;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: 0 10px 30px rgba(8, 51, 68, 0.25);
+            border-top: 5px solid #f59e0b;
+        }
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .admin-avatar-large {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: #fef08a;
+            color: #854d0e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.3rem;
+            font-weight: 800;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            border: 3px solid #fde047;
+        }
+        .admin-meta h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: #ffffff;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .admin-meta p {
+            color: #cffafe;
+            font-size: 0.92rem;
+            margin: 0;
+        }
+        .admin-badge-gold {
+            background: #fef08a;
+            color: #854d0e;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-top: 0.35rem;
+        }
+        .admin-nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.3rem;
+            border-bottom: 2px solid #a5f3fc;
+            overflow-x: auto;
+        }
+        .admin-tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .admin-tab-btn.active {
+            color: #0891b2;
+            border-bottom-color: #0891b2;
+            background: rgba(207, 250, 254, 0.4);
+        }
+        .admin-tab-btn:hover {
+            color: #0891b2;
+        }
+        .btn-action-admin {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+        .btn-action-del {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .btn-action-del:hover {
+            background: #ef5350;
+            color: #fff;
+        }
+        .btn-action-view {
+            background: #ecfeff;
+            color: #0891b2;
+            border: 1px solid #a5f3fc;
+        }
+        .btn-action-view:hover {
+            background: #0891b2;
+            color: #fff;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(8, 51, 68, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-top: 5px solid #0891b2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+                <li class="admin-nav-item"><a href="admin.html" class="nav-link active" style="color:#fef08a; font-weight:700; background:rgba(254, 240, 138, 0.2); border-radius:4px;">Admin Console</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ADMIN HERO BANNER -->
+        <div class="admin-hero">
+            <div class="admin-user-info">
+                <div class="admin-avatar-large">A</div>
+                <div class="admin-meta">
+                    <h2>
+                        Central Mill Administration Console
+                    </h2>
+                    <p>Global oversight of registered mill users, production orders, and cumulative footprint metrics.</p>
+                    <span class="admin-badge-gold">System Administrator Mode</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
+                <div class="cloud-status-pill" id="adminCloudStatusPill" style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:0.45rem 0.85rem; border-radius:20px; font-size:0.8rem; font-weight:600;">
+                    <span id="adminCloudDot" style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block;"></span>
+                    <span id="adminCloudStatusText">Cloud DB: Connected</span>
+                </div>
+                <button type="button" class="btn-secondary" onclick="manualCloudSync()" id="adminSyncBtn" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.4);">
+                    Sync Cloud DB
+                </button>
+                <button type="button" class="btn-primary" onclick="openNewUserModal()" style="background:#f59e0b; color:#fff; border:none; box-shadow:0 4px 12px rgba(245, 158, 11, 0.4);">
+                    + Register New User
+                </button>
+                <button type="button" class="btn-secondary" onclick="exportMasterAuditCSV()">
+                    Master Audit CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- FACTORY-WIDE AGGREGATED KPIS -->
+        <div class="results-kpi-grid">
+            <div class="kpi-card kpi-carbon">
+                <div class="kpi-title">Total Registered Users</div>
+                <div class="kpi-value" id="adminKpiUsers">1</div>
+                <div class="kpi-unit">Active User Accounts</div>
+                <div class="kpi-intensity" id="adminKpiUsersNote">All mill engineers &amp; leads</div>
+            </div>
+
+            <div class="kpi-card kpi-water">
+                <div class="kpi-title">Global Orders Evaluated</div>
+                <div class="kpi-value" id="adminKpiOrders">0</div>
+                <div class="kpi-unit">Assessed Orders</div>
+                <div class="kpi-intensity" id="adminKpiWeightTotal">0 kg Total Fabric</div>
+            </div>
+
+            <div class="kpi-card kpi-fresh">
+                <div class="kpi-title">Mill Cumulative Carbon</div>
+                <div class="kpi-value" id="adminKpiCarbon">0</div>
+                <div class="kpi-unit">kg CO₂e Total Emissions</div>
+                <div class="kpi-intensity" id="adminKpiCarbonAvg">0.0 kg CO₂e / kg avg</div>
+            </div>
+
+            <div class="kpi-card kpi-saved">
+                <div class="kpi-title">Mill Cumulative Water</div>
+                <div class="kpi-value" id="adminKpiWater">0</div>
+                <div class="kpi-unit">Litres Total Consumption</div>
+                <div class="kpi-intensity" id="adminKpiWaterAvg">0 L / kg avg</div>
+            </div>
+        </div>
+
+        <!-- ADMIN NAVIGATION TABS -->
+        <div class="admin-nav-tabs">
+            <button type="button" class="admin-tab-btn active" id="tabBtnOrders" onclick="switchAdminTab('orders')">
+                All Mill Orders (<span id="countOrdersBadge">0</span>)
+            </button>
+            <button type="button" class="admin-tab-btn" id="tabBtnUsers" onclick="switchAdminTab('users')">
+                Registered Users (<span id="countUsersBadge">1</span>)
+            </button>
+            <button type="button" class="admin-tab-btn" id="tabBtnFabrics" onclick="switchAdminTab('fabrics')">
+                Fabric Type Analytics
+            </button>
+            <button type="button" class="admin-tab-btn" id="tabBtnChems" onclick="switchAdminTab('chems')">
+                Custom Chemical Database Audit
+            </button>
+        </div>
+
+        <!-- TAB 1: ALL ORDERS AUDIT -->
+        <section class="card" id="adminOrdersSection">
+            <div class="card-header-styled">
+                <h2><span>Complete Factory Orders Database</span></h2>
+                <span class="badge-tag">Auditing &amp; Monitoring</span>
+            </div>
+            <p class="section-desc">
+                Review and monitor every production footprint calculated across all registered users and departments.
+            </p>
+
+            <div style="display:flex; gap:0.8rem; margin-bottom:1.2rem; flex-wrap:wrap;">
+                <input type="text" id="adminOrderSearch" placeholder="Search by PO #, title, user, or company..." oninput="filterAdminOrders()" style="flex:1; min-width:240px; padding:0.6rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem;">
+                <select id="adminFabricFilter" onchange="filterAdminOrders()" style="padding:0.6rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem;">
+                    <option value="">All Fabric Types</option>
+                    <option value="cotton">100% Cotton</option>
+                    <option value="polyester">100% Polyester</option>
+                    <option value="blend">Cotton / Poly Blend</option>
+                </select>
+                <select id="adminUserFilter" onchange="filterAdminOrders()" style="padding:0.6rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem;">
+                    <option value="">All Users</option>
+                </select>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>PO / Batch #</th>
+                            <th>Order Title</th>
+                            <th>Submitting User</th>
+                            <th>Mill / Company</th>
+                            <th>Fabric Type</th>
+                            <th>Weight (kg)</th>
+                            <th>Total Carbon (kg CO₂e)</th>
+                            <th>Carbon / kg</th>
+                            <th>Total Water (L)</th>
+                            <th>Date</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminOrdersTbody"></tbody>
+                </table>
+            </div>
+            <div id="noOrdersAdmin" style="display:none; text-align:center; padding:2rem; color:var(--text-muted);">
+                No orders found in the database.
+            </div>
+        </section>
+
+        <!-- TAB 2: USER MANAGEMENT -->
+        <section class="card" id="adminUsersSection" style="display:none;">
+            <div class="card-header-styled">
+                <h2><span>Registered Users &amp; Mill Accounts</span></h2>
+                <button type="button" class="btn-primary" onclick="openNewUserModal()" style="padding:0.4rem 0.9rem; font-size:0.85rem;">
+                    + Add User
+                </button>
+            </div>
+            <p class="section-desc">
+                Manage registered user accounts, assign mill organizations, review order counts, or reset passwords.
+            </p>
+
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email Address</th>
+                            <th>Company / Mill</th>
+                            <th>Role</th>
+                            <th>Total Orders</th>
+                            <th>Registered Date</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB 3: FABRIC TYPE ANALYTICS -->
+        <section class="card" id="adminFabricsSection" style="display:none;">
+            <div class="card-header-styled">
+                <h2><span>Mill Fabric Breakdown &amp; Intensity Benchmarks</span></h2>
+                <span class="badge-tag badge-blue">Composition Analysis</span>
+            </div>
+            <p class="section-desc">
+                Production volume and environmental intensity aggregated by fabric substrate.
+            </p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fabric Composition</th>
+                        <th>Total Orders</th>
+                        <th>Assessed Volume (kg)</th>
+                        <th>Total Carbon (kg CO₂e)</th>
+                        <th>Avg Carbon Intensity</th>
+                        <th>Total Water (L)</th>
+                        <th>Avg Water Intensity</th>
+                    </tr>
+                </thead>
+                <tbody id="adminFabricsTbody"></tbody>
+            </table>
+        </section>
+
+        <!-- TAB 4: CHEMICALS AUDIT -->
+        <section class="card" id="adminChemsSection" style="display:none;">
+            <div class="card-header-styled">
+                <h2><span>Custom Chemical Library Oversight</span></h2>
+                <a href="chemicals.html" class="btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.85rem;">Open Full Library &rarr;</a>
+            </div>
+            <p class="section-desc">
+                Monitor custom chemicals and emission factors entered by users to verify environmental reporting accuracy.
+            </p>
+
+            <div id="adminChemsContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1rem;">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- REGISTER USER MODAL -->
+    <div class="modal-overlay" id="newUserModal">
+        <div class="modal-content">
+            <h3 style="color:#0891b2; margin-bottom:0.4rem;">Register New Mill User</h3>
+            <p style="font-size:0.85rem; color:#64748b; margin-bottom:1.2rem;">Create a credential for a team member to access the calculator.</p>
+
+            <form onsubmit="handleAdminCreateUser(event)">
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                    <label for="adminNewName">Full Name</label>
+                    <input type="text" id="adminNewName" placeholder="e.g. David Kumar" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                    <label for="adminNewCompany">Mill / Company</label>
+                    <input type="text" id="adminNewCompany" placeholder="e.g. Pioneer Denim Mills" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                    <label for="adminNewUsername">Username</label>
+                    <input type="text" id="adminNewUsername" placeholder="e.g. dkumar" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                    <label for="adminNewEmail">Email Address</label>
+                    <input type="email" id="adminNewEmail" placeholder="e.g. david@pioneer.com" required>
+                </div>
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label for="adminNewPassword">Password (minimum 4 chars)</label>
+                    <input type="password" id="adminNewPassword" placeholder="••••••••" minlength="4" required>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:0.6rem;">
+                    <button type="button" class="btn-secondary" onclick="closeNewUserModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create User Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RESET PASSWORD MODAL -->
+    <div class="modal-overlay" id="resetPassModal">
+        <div class="modal-content">
+            <h3 style="color:#0891b2; margin-bottom:0.4rem;">Reset User Password</h3>
+            <p style="font-size:0.85rem; color:#64748b; margin-bottom:1.2rem;" id="resetPassUserLabel">Target User: </p>
+
+            <form onsubmit="handleAdminResetPassword(event)">
+                <input type="hidden" id="resetTargetUsername">
+                <div class="form-group" style="margin-bottom:1.2rem;">
+                    <label for="adminNewPassInput">New Password (minimum 4 chars)</label>
+                    <input type="password" id="adminNewPassInput" placeholder="••••••••" minlength="4" required>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:0.6rem;">
+                    <button type="button" class="btn-secondary" onclick="closeResetPassModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Administrator Central Command</p>
+        <p>Real-time monitoring across multi-facility LCA accounts and order databases.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        let masterOrders = [];
+        let masterUsers = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = getCurrentUser();
+            if (!user || !user.username || user.username.toLowerCase() !== 'admin') {
+                alert('Access restricted to System Administrators.');
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            await refreshAdminData(true);
+        });
+
+        async function refreshAdminData(syncWithCloud = true) {
+            const statusText = document.getElementById('adminCloudStatusText');
+            const statusDot = document.getElementById('adminCloudDot');
+
+            if (syncWithCloud && typeof syncUsersFromCloud === 'function') {
+                if (statusText) statusText.textContent = 'Cloud DB: Syncing...';
+                try {
+                    await Promise.all([syncUsersFromCloud(), syncOrdersFromCloud()]);
+                    if (statusText) statusText.textContent = 'Cloud DB: Synced';
+                    if (statusDot) statusDot.style.background = '#22c55e';
+                } catch (err) {
+                    console.warn('Admin cloud sync error:', err);
+                    if (statusText) statusText.textContent = 'Cloud DB: Offline';
+                    if (statusDot) statusDot.style.background = '#f59e0b';
+                }
+            }
+
+            masterUsers = getUsersDB();
+            masterOrders = getOrdersDB();
+
+            updateAdminKPIs();
+            renderAdminOrdersTable(masterOrders);
+            renderAdminUsersTable(masterUsers);
+            renderFabricAnalytics(masterOrders);
+            renderCustomChemsAudit();
+            populateUserFilter(masterUsers);
+        }
+
+        async function manualCloudSync() {
+            const btn = document.getElementById('adminSyncBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Syncing...';
+            }
+            await refreshAdminData(true);
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Sync Cloud DB';
+            }
+            alert('Cloud database synchronized successfully.');
+        }
+
+        function updateAdminKPIs() {
+            let totalWeight = 0, totalCarbon = 0, totalWater = 0;
+
+            masterOrders.forEach(o => {
+                totalWeight += parseFloat(o.productionWeight) || 0;
+                totalCarbon += parseFloat(o.totalCarbon) || 0;
+                totalWater += parseFloat(o.totalWater) || 0;
+            });
+
+            document.getElementById('adminKpiUsers').textContent = masterUsers.length;
+            document.getElementById('adminKpiOrders').textContent = masterOrders.length;
+            document.getElementById('countOrdersBadge').textContent = masterOrders.length;
+            document.getElementById('countUsersBadge').textContent = masterUsers.length;
+
+            document.getElementById('adminKpiWeightTotal').textContent = `${Math.round(totalWeight).toLocaleString()} kg Total Fabric`;
+            document.getElementById('adminKpiCarbon').textContent = Math.round(totalCarbon).toLocaleString();
+            document.getElementById('adminKpiWater').textContent = Math.round(totalWater).toLocaleString();
+
+            const avgC = totalWeight > 0 ? (totalCarbon / totalWeight).toFixed(2) : '0.00';
+            const avgW = totalWeight > 0 ? (totalWater / totalWeight).toFixed(1) : '0.0';
+
+            document.getElementById('adminKpiCarbonAvg').textContent = `${avgC} kg CO₂e / kg avg`;
+            document.getElementById('adminKpiWaterAvg').textContent = `${avgW} L / kg avg`;
+        }
+
+        function switchAdminTab(tabKey) {
+            const tabs = ['orders', 'users', 'fabrics', 'chems'];
+            tabs.forEach(t => {
+                const sec = document.getElementById(`admin${t.charAt(0).toUpperCase() + t.slice(1)}Section`);
+                const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (t === tabKey) {
+                    sec.style.display = 'block';
+                    btn.classList.add('active');
+                } else {
+                    sec.style.display = 'none';
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function renderAdminOrdersTable(orders) {
+            const tbody = document.getElementById('adminOrdersTbody');
+            const noMsg = document.getElementById('noOrdersAdmin');
+
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+            noMsg.style.display = 'none';
+
+            tbody.innerHTML = orders.map(o => {
+                const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : '-';
+                const fabricFormatted = o.fabricType ? (o.fabricType.charAt(0).toUpperCase() + o.fabricType.slice(1)) : 'Cotton';
+
+                return `
+                    <tr>
+                        <td><strong>${o.poNumber || o.id}</strong></td>
+                        <td>${o.name || 'Textile Order'}</td>
+                        <td><span style="font-weight:600; color:#0e7490;">${o.userName || o.userId}</span></td>
+                        <td style="font-size:0.85rem; color:#475569;">${o.userCompany || '-'}</td>
+                        <td><span class="badge-tag">${fabricFormatted}</span></td>
+                        <td>${Number(o.productionWeight || 0).toLocaleString()}</td>
+                        <td style="color:#0891b2; font-weight:700;">${Number(o.totalCarbon || 0).toFixed(1)}</td>
+                        <td>${Number(o.carbonIntensity || 0).toFixed(2)}</td>
+                        <td style="color:#0284c7; font-weight:700;">${Number(o.totalWater || 0).toFixed(0)}</td>
+                        <td style="font-size:0.8rem; color:#64748b;">${dateStr}</td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button type="button" class="btn-action-admin btn-action-view" onclick="adminLoadOrder('${o.id}')" title="Load order into calculator">
+                                Load
+                            </button>
+                            <button type="button" class="btn-action-admin btn-action-del" onclick="adminDeleteOrder('${o.id}')" title="Delete order">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterAdminOrders() {
+            const q = (document.getElementById('adminOrderSearch').value || '').toLowerCase().trim();
+            const fabric = (document.getElementById('adminFabricFilter').value || '').toLowerCase().trim();
+            const user = (document.getElementById('adminUserFilter').value || '').toLowerCase().trim();
+
+            const filtered = masterOrders.filter(o => {
+                const matchesQ = !q || 
+                    (o.poNumber && o.poNumber.toLowerCase().includes(q)) ||
+                    (o.name && o.name.toLowerCase().includes(q)) ||
+                    (o.userName && o.userName.toLowerCase().includes(q)) ||
+                    (o.userCompany && o.userCompany.toLowerCase().includes(q));
+
+                const matchesFabric = !fabric || (o.fabricType && o.fabricType.toLowerCase() === fabric);
+                const matchesUser = !user || (o.userId && o.userId.toLowerCase() === user);
+
+                return matchesQ && matchesFabric && matchesUser;
+            });
+
+            renderAdminOrdersTable(filtered);
+        }
+
+        function populateUserFilter(users) {
+            const sel = document.getElementById('adminUserFilter');
+            sel.innerHTML = '<option value="">All Users</option>';
+            users.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.username.toLowerCase();
+                opt.textContent = `${u.name} (${u.username})`;
+                sel.appendChild(opt);
+            });
+        }
+
+        function renderAdminUsersTable(users) {
+            const tbody = document.getElementById('adminUsersTbody');
+            tbody.innerHTML = users.map(u => {
+                const isPrimaryAdmin = u.username.toLowerCase() === 'admin';
+                const userOrdersCount = masterOrders.filter(o => o.userId && o.userId.toLowerCase() === u.username.toLowerCase()).length;
+                const regDate = u.registeredAt ? new Date(u.registeredAt).toLocaleDateString() : 'System Default';
+
+                return `
+                    <tr>
+                        <td><strong>${u.name}</strong> ${isPrimaryAdmin ? '(Primary Admin)' : ''}</td>
+                        <td><code>${u.username}</code></td>
+                        <td>${u.email}</td>
+                        <td>${u.company}</td>
+                        <td><span class="${isPrimaryAdmin ? 'badge-amber' : 'badge-tag'}">${u.role}</span></td>
+                        <td><strong style="color:#0891b2;">${userOrdersCount}</strong></td>
+                        <td style="font-size:0.8rem; color:#64748b;">${regDate}</td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button type="button" class="btn-action-admin btn-action-view" onclick="openResetPassModal('${u.username}', '${u.name}')" title="Reset password">
+                                Reset
+                            </button>
+                            ${!isPrimaryAdmin ? `
+                                <button type="button" class="btn-action-admin btn-action-del" onclick="handleAdminDeleteUser('${u.username}')" title="Delete user">
+                                    Delete
+                                </button>
+                            ` : '<span style="font-size:0.75rem; color:#888;">Permanent</span>'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderFabricAnalytics(orders) {
+            const types = ['cotton', 'polyester', 'blend'];
+            const labels = { cotton: '100% Cotton', polyester: '100% Polyester', blend: 'Cotton / Poly Blend' };
+
+            const tbody = document.getElementById('adminFabricsTbody');
+            tbody.innerHTML = types.map(t => {
+                const matched = orders.filter(o => (o.fabricType || 'cotton').toLowerCase() === t);
+                let w = 0, c = 0, wat = 0;
+                matched.forEach(o => {
+                    w += parseFloat(o.productionWeight) || 0;
+                    c += parseFloat(o.totalCarbon) || 0;
+                    wat += parseFloat(o.totalWater) || 0;
+                });
+                const avgC = w > 0 ? (c / w).toFixed(2) : '-';
+                const avgWat = w > 0 ? (wat / w).toFixed(1) : '-';
+
+                return `
+                    <tr>
+                        <td><strong>${labels[t]}</strong></td>
+                        <td>${matched.length}</td>
+                        <td>${Math.round(w).toLocaleString()} kg</td>
+                        <td style="color:#0891b2; font-weight:700;">${Math.round(c).toLocaleString()}</td>
+                        <td>${avgC} kg CO₂e/kg</td>
+                        <td style="color:#0284c7; font-weight:700;">${Math.round(wat).toLocaleString()}</td>
+                        <td>${avgWat} L/kg</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderCustomChemsAudit() {
+            const container = document.getElementById('adminChemsContainer');
+            const customChems = getCustomChemicals();
+
+            if (!customChems || customChems.length === 0) {
+                container.innerHTML = '<p style="grid-column:1/-1; color:var(--text-muted); font-size:0.9rem;">No custom user chemicals added yet. All mills are using standardized baseline factors.</p>';
+                return;
+            }
+
+            container.innerHTML = customChems.map(c => `
+                <div class="chem-item-card is-custom" style="padding:1rem;">
+                    <div class="chem-card-header">
+                        <strong style="color:#083344; font-size:0.95rem;">${c.name}</strong>
+                        <span class="badge-amber">Custom EF</span>
+                    </div>
+                    <div style="font-size:0.82rem; color:#155e75; margin-bottom:0.6rem;">
+                        Category: <strong>${c.category}</strong>
+                    </div>
+                    <div class="chem-card-footer">
+                        <span class="chem-ef-pill">${c.ef} kg CO₂e/kg</span>
+                        <span style="font-size:0.75rem; color:#64748b;">Key: <code>${c.key}</code></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function adminLoadOrder(id) {
+            if (confirm('Load this order into the calculator?')) {
+                loadOrderIntoCalculator(id);
+            }
+        }
+
+        async function adminDeleteOrder(id) {
+            if (confirm('Delete this order permanently from the factory database?')) {
+                deleteOrderFromDB(id);
+                await refreshAdminData(false);
+            }
+        }
+
+        async function handleAdminDeleteUser(username) {
+            if (confirm(`Are you sure you want to delete user "${username}"? Their historical saved orders will remain in the database.`)) {
+                const res = deleteUserFromDB(username);
+                if (res.success) {
+                    await refreshAdminData(false);
+                } else {
+                    alert(res.message);
+                }
+            }
+        }
+
+        // Modals
+        function openNewUserModal() {
+            document.getElementById('newUserModal').style.display = 'flex';
+        }
+        function closeNewUserModal() {
+            document.getElementById('newUserModal').style.display = 'none';
+        }
+
+        async function handleAdminCreateUser(e) {
+            e.preventDefault();
+            const name = document.getElementById('adminNewName').value;
+            const company = document.getElementById('adminNewCompany').value;
+            const username = document.getElementById('adminNewUsername').value;
+            const email = document.getElementById('adminNewEmail').value;
+            const password = document.getElementById('adminNewPassword').value;
+
+            const res = registerUser({ name, company, username, email, password });
+            if (res.success) {
+                alert(`User "${name}" (${username}) created successfully!`);
+                closeNewUserModal();
+                await refreshAdminData(false);
+            } else {
+                alert(res.message || 'Error creating user.');
+            }
+        }
+
+        function openResetPassModal(username, name) {
+            document.getElementById('resetTargetUsername').value = username;
+            document.getElementById('resetPassUserLabel').textContent = `Target User: ${name} (${username})`;
+            document.getElementById('adminNewPassInput').value = '';
+            document.getElementById('resetPassModal').style.display = 'flex';
+        }
+        function closeResetPassModal() {
+            document.getElementById('resetPassModal').style.display = 'none';
+        }
+
+        function handleAdminResetPassword(e) {
+            e.preventDefault();
+            const username = document.getElementById('resetTargetUsername').value;
+            const newPass = document.getElementById('adminNewPassInput').value;
+
+            const res = resetUserPassword(username, newPass);
+            if (res.success) {
+                alert(`Password for user "${username}" has been updated.`);
+                closeResetPassModal();
+            } else {
+                alert(res.message || 'Error updating password.');
+            }
+        }
+
+        function exportMasterAuditCSV() {
+            if (!masterOrders.length) {
+                alert('No orders available to export.');
+                return;
+            }
+
+            const headers = ['Order ID', 'PO Number', 'Title', 'User', 'Company', 'Fabric Type', 'Weight (kg)', 'Carbon (kg CO2e)', 'Carbon Intensity (kg CO2e/kg)', 'Water (L)', 'Water Intensity (L/kg)', 'Timestamp'];
+            const rows = masterOrders.map(o => [
+                `"${o.id}"`,
+                `"${o.poNumber || o.id}"`,
+                `"${(o.name || '').replace(/"/g, '""')}"`,
+                `"${o.userName || o.userId || ''}"`,
+                `"${(o.userCompany || '').replace(/"/g, '""')}"`,
+                `"${o.fabricType}"`,
+                o.productionWeight,
+                o.totalCarbon,
+                o.carbonIntensity,
+                o.totalWater,
+                o.waterIntensity,
+                `"${o.createdAt}"`
+            ]);
+
+            const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `Master_Mill_Audit_Report_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabrication - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link active">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Fabric Formation: Weaving &amp; Knitting</h1>
+            <p class="page-subtitle">Configure fabric formation technology and warp sizing chemicals (Weaving requires sizing; Knitting does not).</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">Fabrication Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude fabric weaving or knitting machinery emissions and sizing chemicals.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle Fabrication Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludeFabrication" checked onchange="handleSegmentToggle('includeFabrication', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentFabrication">
+            <!-- SECTION: Fabric Formation -->
+            <section class="card" id="sec-weaving">
+                <div class="card-header-styled">
+                    <h2><span>Fabric Formation Method</span></h2>
+                    <span class="badge-tag badge-blue" id="methodBadge">Weaving</span>
+                </div>
+                <p class="section-desc">Select whether your fabric is woven or knitted. Sizing chemicals apply strictly to weaving preparation.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weaveType">Fabric Formation Method</label>
+                        <select id="weaveType" onchange="handleFormationMethodChange()">
+                            <option value="weaving">Weaving (Shuttle / Air-Jet / Rapier)</option>
+                            <option value="knitting">Knitting (Circular / Warp Knitting)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Machine Operation Energy &amp; Water</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weaveGridKwh">Grid Electricity (kWh)</label>
+                        <input type="number" id="weaveGridKwh" value="600" min="0" step="1">
+                        <small>Loom motor drives, creel winding, lubrication pumps</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="weaveGasKwh">Natural Gas / Sizing Steam (kWh)</label>
+                        <input type="number" id="weaveGasKwh" value="100" min="0" step="1">
+                        <small>Cylinder drying in sizing box (weaving only)</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weaveRenewableKwh">Renewable Electricity (kWh)</label>
+                        <input type="number" id="weaveRenewableKwh" value="0" min="0" step="1">
+                        <small>Clean electricity allocation</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="weaveWater">Process Water Used (L)</label>
+                        <input type="number" id="weaveWater" value="200" min="0" step="1">
+                        <small>Humidification and size paste preparation</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Weaving Sizing Chemicals -->
+            <section class="card" id="sec-sizing-chemicals">
+                <div class="card-header-styled">
+                    <h2><span>Weaving Preparation &amp; Sizing Chemicals</span></h2>
+                    <span class="badge-tag">Weaving Only</span>
+                </div>
+                <p class="section-desc">
+                    Warp sizing chemicals (starches, PVA, acrylics, waxes) required to protect warp yarns from abrasive friction on high-speed looms.
+                    Select "Other" to specify custom chemicals and save for future use.
+                </p>
+
+                <!-- NOTICE DISPLAYED WHEN KNITTING IS SELECTED -->
+                <div id="knittingNotice" class="info-callout" style="display: none;">
+                    <h3>Knitting Selected</h3>
+                    <p>Sizing chemicals are not utilized in knit fabric manufacturing (yarns are knitted directly from cones with knitting oils). Sizing chemical inputs are disabled for knitting.</p>
+                </div>
+
+                <!-- CHEMICALS CONTAINER (SHOWN ONLY FOR WEAVING) -->
+                <div id="sizingContainerWrap">
+                    <div id="weaveChemContainer" class="chem-container"></div>
+                    <button type="button" class="btn-add-chem" onclick="addWeavingChemRow()">
+                        + Add Weaving Chemical
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- DISABLED NOTIFICATION (WHEN STAGE IS SWITCHED OFF) -->
+        <div id="segmentDisabledNoticeFabrication" class="segment-disabled-notice" style="display: none;">
+            <h3>Fabrication Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All weaving/knitting electricity, steam, and sizing chemicals are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate fabrication emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions">
+            <div>
+                <a href="spinning.html" class="btn-secondary">&larr; Back to Spinning</a>
+            </div>
+            <div>
+                <a href="wet-processing.html" class="btn-primary">
+                    Next: Wet Processing (Pre-treatment, Dyeing, Printing) &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`Fabrication stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentFabrication');
+            const notice = document.getElementById('segmentDisabledNoticeFabrication');
+            const toggleInput = document.getElementById('chkIncludeFabrication');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function handleFormationMethodChange() {
+            const method = document.getElementById('weaveType').value;
+            const sizingSection = document.getElementById('sizingContainerWrap');
+            const knittingNotice = document.getElementById('knittingNotice');
+            const badge = document.getElementById('methodBadge');
+
+            if (method === 'knitting') {
+                sizingSection.style.display = 'none';
+                knittingNotice.style.display = 'block';
+                badge.textContent = 'Knitting';
+                badge.className = 'badge-tag badge-amber';
+            } else {
+                sizingSection.style.display = 'block';
+                knittingNotice.style.display = 'none';
+                badge.textContent = 'Weaving';
+                badge.className = 'badge-tag badge-blue';
+            }
+            saveCurrentInputs();
+        }
+
+        function addWeavingChemRow() {
+            addChemRowToContainer('weaveChemContainer', 'weaving', {
+                key: 'starch',
+                qty: 25,
+                ef: 1.20
+            });
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includeFabrication: document.getElementById('chkIncludeFabrication').checked,
+                weaveType: document.getElementById('weaveType').value,
+                weaveGridKwh: parseFloat(document.getElementById('weaveGridKwh').value) || 0,
+                weaveGasKwh: parseFloat(document.getElementById('weaveGasKwh').value) || 0,
+                weaveRenewableKwh: parseFloat(document.getElementById('weaveRenewableKwh').value) || 0,
+                weaveWater: parseFloat(document.getElementById('weaveWater').value) || 0
+            });
+            syncChemRowData('weaving');
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isFabOn = state.includeFabrication !== false;
+            updateSegmentUI(isFabOn);
+
+            document.getElementById('weaveType').value = state.weaveType || 'weaving';
+            document.getElementById('weaveGridKwh').value = state.weaveGridKwh;
+            document.getElementById('weaveGasKwh').value = state.weaveGasKwh;
+            document.getElementById('weaveRenewableKwh').value = state.weaveRenewableKwh;
+            document.getElementById('weaveWater').value = state.weaveWater;
+
+            // Populate weaving chemical rows
+            const container = document.getElementById('weaveChemContainer');
+            container.innerHTML = '';
+            const weaveChems = (state.weaveChems && state.weaveChems.length > 0) ? state.weaveChems : [
+                { key: 'starch', qty: 50, ef: 1.20 }
+            ];
+
+            weaveChems.forEach(c => {
+                addChemRowToContainer('weaveChemContainer', 'weaving', c);
+            });
+
+            handleFormationMethodChange();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            document.querySelectorAll('input:not(.chem-qty):not(.chem-ef):not(.chem-custom-name), select:not(.chem-select)').forEach(el => {
+                el.addEventListener('input', saveCurrentInputs);
+                el.addEventListener('change', saveCurrentInputs);
+            });
+        });
+    </script>
+</body>
+</html>

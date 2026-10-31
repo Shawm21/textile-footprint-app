@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile &amp; Order Database - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .profile-hero {
+            background: linear-gradient(135deg, #0e7490, #0891b2, #06b6d4);
+            color: #fff;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+        .profile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .profile-avatar-large {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0891b2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        .profile-meta h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: #ffffff;
+            border: none;
+            padding: 0;
+        }
+        .profile-meta p {
+            color: #cffafe;
+            font-size: 0.92rem;
+            margin: 0;
+        }
+        .order-search-box {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .order-search-box input {
+            flex: 1;
+            min-width: 240px;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
+        }
+        .action-btn-sm {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            border: none;
+            transition: var(--transition);
+        }
+        .btn-load-order {
+            background: #0891b2;
+            color: #fff;
+        }
+        .btn-load-order:hover {
+            background: #0e7490;
+        }
+        .btn-del-order {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .btn-del-order:hover {
+            background: #ef5350;
+            color: #fff;
+        }
+        .tag-admin {
+            background: #fef08a;
+            color: #854d0e;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link active">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- PROFILE HERO BANNER -->
+        <div class="profile-hero">
+            <div class="profile-user-info">
+                <div class="profile-avatar-large" id="profAvatar">A</div>
+                <div class="profile-meta">
+                    <h2 id="profName">User Profile</h2>
+                    <p id="profRole">Sustainability Specialist</p>
+                    <p id="profCompany" style="opacity: 0.9; font-size: 0.85rem; margin-top: 0.2rem;">Textile Mill</p>
+                </div>
+            </div>
+            <div id="profileHeroActions" style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+                <a href="index.html" class="btn-primary" style="background:#fff; color:#0891b2; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+                    + Calculate New Order
+                </a>
+            </div>
+        </div>
+
+        <!-- PROFILE STATS GRID -->
+        <div class="results-kpi-grid">
+            <div class="kpi-card kpi-carbon">
+                <div class="kpi-title">Saved Orders Database</div>
+                <div class="kpi-value" id="kpiTotalOrders">0</div>
+                <div class="kpi-unit">Orders Evaluated</div>
+                <div class="kpi-intensity">Profile History</div>
+            </div>
+
+            <div class="kpi-card kpi-water">
+                <div class="kpi-title">Total Assessed Weight</div>
+                <div class="kpi-value" id="kpiTotalWeight">0</div>
+                <div class="kpi-unit">kg Finished Fabric</div>
+                <div class="kpi-intensity">Cumulative Production</div>
+            </div>
+
+            <div class="kpi-card kpi-fresh">
+                <div class="kpi-title">Cumulative Carbon</div>
+                <div class="kpi-value" id="kpiCumulativeCarbon">0</div>
+                <div class="kpi-unit">kg CO₂e Evaluated</div>
+                <div class="kpi-intensity">Total LCA Carbon</div>
+            </div>
+
+            <div class="kpi-card kpi-saved">
+                <div class="kpi-title">Cumulative Water</div>
+                <div class="kpi-value" id="kpiCumulativeWater">0</div>
+                <div class="kpi-unit">Litres Evaluated</div>
+                <div class="kpi-intensity">Total LCA Water</div>
+            </div>
+        </div>
+
+        <!-- ORDERS DATABASE SECTION -->
+        <section class="card">
+            <div class="card-header-styled">
+                <h2><span>Orders History &amp; Assessment Database</span></h2>
+                <div id="adminBadgeContainer"></div>
+            </div>
+            <p class="section-desc">
+                Complete database of every textile production order assessed. You can review past footprints, load any order back into the calculator, or export order reports.
+            </p>
+
+            <div class="order-search-box">
+                <input type="text" id="orderSearchInput" placeholder="Search orders by PO #, title, or fabric type..." oninput="filterOrders()">
+                <select id="orderFabricFilter" onchange="filterOrders()" style="padding:0.6rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem;">
+                    <option value="">All Fabric Types</option>
+                    <option value="cotton">100% Cotton</option>
+                    <option value="polyester">100% Polyester</option>
+                    <option value="blend">Cotton / Poly Blend</option>
+                </select>
+                <button type="button" class="btn-secondary" onclick="exportOrdersCSV()" style="padding:0.6rem 1rem;">
+                    Export Orders CSV
+                </button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="data-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order / PO #</th>
+                            <th>Order Title</th>
+                            <th>Fabric Type</th>
+                            <th>Weight (kg)</th>
+                            <th>Total Carbon (kg CO₂e)</th>
+                            <th>Carbon / kg</th>
+                            <th>Total Water (L)</th>
+                            <th>Saved Date</th>
+                            <th id="thUser" style="display:none;">User</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyOrdersMessage" style="display:none; text-align:center; padding: 2.5rem 1rem; color: var(--text-muted);">
+                <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">No saved orders found in your database.</p>
+                <p style="font-size: 0.9rem; margin-bottom: 1.2rem;">Calculate an assessment and click "Save Order to Profile Database" on the Results page.</p>
+                <a href="index.html" class="btn-primary">Start First Assessment &rarr;</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>User profile and persistent orders database.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        let allUserOrders = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Populate hero
+            document.getElementById('profAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('profName').textContent = user.name;
+            document.getElementById('profRole').textContent = user.role;
+            document.getElementById('profCompany').textContent = `${user.company} • ${user.email}`;
+
+            const isAdmin = user.username && user.username.toLowerCase() === 'admin';
+            if (isAdmin) {
+                document.getElementById('adminBadgeContainer').innerHTML = `
+                    <span class="tag-admin">Administrator (Viewing All Mill Orders)</span>
+                `;
+                document.getElementById('thUser').style.display = 'table-cell';
+
+                const actions = document.getElementById('profileHeroActions');
+                if (actions) {
+                    const adminBtn = document.createElement('a');
+                    adminBtn.href = 'admin.html';
+                    adminBtn.className = 'btn-primary';
+                    adminBtn.style.cssText = 'background:#fef08a; color:#854d0e; font-weight:700; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                    adminBtn.innerHTML = 'Open Admin Console &rarr;';
+                    actions.prepend(adminBtn);
+                }
+            }
+
+            loadOrders();
+        });
+
+        async function loadOrders() {
+            allUserOrders = getUserOrders();
+            updateKPIs(allUserOrders);
+            renderOrdersTable(allUserOrders);
+
+            // Sync from cloud in background and refresh
+            if (typeof syncOrdersFromCloud === 'function') {
+                await syncOrdersFromCloud();
+                allUserOrders = getUserOrders();
+                updateKPIs(allUserOrders);
+                renderOrdersTable(allUserOrders);
+            }
+        }
+
+        function updateKPIs(orders) {
+            let totalWeight = 0;
+            let totalCarbon = 0;
+            let totalWater = 0;
+
+            orders.forEach(o => {
+                totalWeight += parseFloat(o.productionWeight) || 0;
+                totalCarbon += parseFloat(o.totalCarbon) || 0;
+                totalWater += parseFloat(o.totalWater) || 0;
+            });
+
+            document.getElementById('kpiTotalOrders').textContent = orders.length;
+            document.getElementById('kpiTotalWeight').textContent = Math.round(totalWeight).toLocaleString();
+            document.getElementById('kpiCumulativeCarbon').textContent = Math.round(totalCarbon).toLocaleString();
+            document.getElementById('kpiCumulativeWater').textContent = Math.round(totalWater).toLocaleString();
+        }
+
+        function renderOrdersTable(orders) {
+            const tbody = document.getElementById('ordersTableBody');
+            const emptyMsg = document.getElementById('emptyOrdersMessage');
+            const table = document.getElementById('ordersTable');
+            const user = getCurrentUser();
+            const isAdmin = user && user.username && user.username.toLowerCase() === 'admin';
+
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.style.display = 'block';
+                table.style.display = 'none';
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            table.style.display = 'table';
+
+            tbody.innerHTML = orders.map(o => {
+                const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : '-';
+                const userCell = isAdmin ? `<td><span style="font-size:0.8rem; font-weight:600; color:#0e7490;">${o.userName || o.userId || 'User'}</span></td>` : '';
+                const fabricFormatted = o.fabricType ? (o.fabricType.charAt(0).toUpperCase() + o.fabricType.slice(1)) : 'Cotton';
+
+                return `
+                    <tr>
+                        <td><strong>${o.poNumber || o.id}</strong></td>
+                        <td>${o.name || 'Textile Assessment'}</td>
+                        <td><span class="badge-tag">${fabricFormatted}</span></td>
+                        <td>${Number(o.productionWeight || 0).toLocaleString()}</td>
+                        <td style="color:#0891b2; font-weight:700;">${Number(o.totalCarbon || 0).toFixed(1)}</td>
+                        <td>${Number(o.carbonIntensity || 0).toFixed(2)}</td>
+                        <td style="color:#0284c7; font-weight:700;">${Number(o.totalWater || 0).toFixed(0)}</td>
+                        <td style="font-size:0.8rem; color:#64748b;">${dateStr}</td>
+                        ${userCell}
+                        <td style="text-align: right; white-space: nowrap;">
+                            <button type="button" class="action-btn-sm btn-load-order" onclick="handleLoadOrder('${o.id}')" title="Load this order into calculator">
+                                Load in Calculator
+                            </button>
+                            <button type="button" class="action-btn-sm btn-del-order" onclick="handleDeleteOrder('${o.id}')" title="Delete order">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterOrders() {
+            const query = (document.getElementById('orderSearchInput').value || '').toLowerCase().trim();
+            const fabricFilter = (document.getElementById('orderFabricFilter').value || '').toLowerCase().trim();
+
+            const filtered = allUserOrders.filter(o => {
+                const matchesQuery = !query || 
+                    (o.poNumber && o.poNumber.toLowerCase().includes(query)) ||
+                    (o.name && o.name.toLowerCase().includes(query)) ||
+                    (o.id && o.id.toLowerCase().includes(query)) ||
+                    (o.userName && o.userName.toLowerCase().includes(query));
+                
+                const matchesFabric = !fabricFilter || (o.fabricType && o.fabricType.toLowerCase() === fabricFilter);
+
+                return matchesQuery && matchesFabric;
+            });
+
+            renderOrdersTable(filtered);
+        }
+
+        function handleLoadOrder(orderId) {
+            if (confirm('Load this saved order into the calculator? Current unsaved work will be replaced by this order.')) {
+                loadOrderIntoCalculator(orderId);
+            }
+        }
+
+        function handleDeleteOrder(orderId) {
+            if (confirm('Are you sure you want to delete this order from your profile database?')) {
+                deleteOrderFromDB(orderId);
+                loadOrders();
+            }
+        }
+
+        function exportOrdersCSV() {
+            if (!allUserOrders.length) {
+                alert('No orders to export.');
+                return;
+            }
+
+            const headers = ['Order ID', 'PO Number', 'Title', 'Fabric Type', 'Production Weight (kg)', 'Total Carbon (kg CO2e)', 'Carbon Intensity (kg CO2e/kg)', 'Total Water (L)', 'Water Intensity (L/kg)', 'Created Date', 'User'];
+            const rows = allUserOrders.map(o => [
+                `"${o.id}"`,
+                `"${o.poNumber || o.id}"`,
+                `"${(o.name || '').replace(/"/g, '""')}"`,
+                `"${o.fabricType}"`,
+                o.productionWeight,
+                o.totalCarbon,
+                o.carbonIntensity,
+                o.totalWater,
+                o.waterIntensity,
+                `"${o.createdAt}"`,
+                `"${o.userName || o.userId || ''}"`
+            ]);
+
+            const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `Textile_Orders_Database_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

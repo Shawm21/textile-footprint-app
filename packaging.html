@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packaging - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link active">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Packaging Materials &amp; Packing Operations</h1>
+            <p class="page-subtitle">Configure cartons, polybags, hangtags, apparel accessories, and automated packaging line energy consumption.</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">Packaging Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude secondary packaging materials and packing line energy from your lifecycle footprint.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle Packaging Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludePackaging" checked onchange="handleSegmentToggle('includePackaging', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentPackaging">
+            <!-- SECTION 1: Packaging Materials -->
+            <section class="card" id="sec-packaging-materials">
+                <div class="card-header-styled">
+                    <h2><span>Secondary Packaging Materials</span></h2>
+                    <span class="badge-tag">Materials</span>
+                </div>
+                <p class="section-desc">Apparel protection materials, shipping cartons, plastic films, tags, and hangers.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="packPlasticKg">Plastic Packaging (Polybags, Shrink Wrap, Straps) (kg)</label>
+                        <input type="number" id="packPlasticKg" value="20" min="0" step="0.1">
+                        <small>LDPE / PP garment bags, pallet stretch wrap, strapping bands</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="packPlasticEF">Plastic EF (kg CO₂e/kg plastic)</label>
+                        <input type="number" id="packPlasticEF" value="3.1" min="0" step="0.01">
+                        <small>Virgin LDPE ~3.1, Recycled PCR plastic ~1.5</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="packCardboardKg">Cardboard / Corrugated Master Cartons &amp; Paper Tubes (kg)</label>
+                        <input type="number" id="packCardboardKg" value="30" min="0" step="0.1">
+                        <small>Corrugated carton boxes, fabric roll paper tubes, interleaving</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="packCardboardEF">Cardboard EF (kg CO₂e/kg cardboard)</label>
+                        <input type="number" id="packCardboardEF" value="0.94" min="0" step="0.01">
+                        <small>Corrugated boxes ~0.94, Recycled fiberboard ~0.72</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="packPaperTagsKg">Apparel Hangtags, Care Labels &amp; Barcode Stickers (kg)</label>
+                        <input type="number" id="packPaperTagsKg" value="5" min="0" step="0.1">
+                        <small>Price tickets, brand cards, woven/printed care tags</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="packPaperTagsEF">Hangtags &amp; Labels EF (kg CO₂e/kg)</label>
+                        <input type="number" id="packPaperTagsEF" value="1.10" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="packHangersKg">Garment Hangers &amp; Plastic Clips (kg)</label>
+                        <input type="number" id="packHangersKg" value="8" min="0" step="0.1">
+                        <small>PP/PS plastic shipping hangers, metal sizer rings</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="packHangersEF">Hangers EF (kg CO₂e/kg hanger)</label>
+                        <input type="number" id="packHangersEF" value="2.20" min="0" step="0.01">
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Packaging Operations & Machinery Energy -->
+            <section class="card" id="sec-packaging-energy">
+                <div class="card-header-styled">
+                    <h2><span>Packaging Line Electricity &amp; Thermal Energy</span></h2>
+                    <span class="badge-tag badge-blue">Operations</span>
+                </div>
+                <p class="section-desc">Automated carton sealers, heat tunnel shrink wrappers, bagging machines, and conveyor lines.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="packGridKwh">Grid Electricity for Packing Machinery (kWh)</label>
+                        <input type="number" id="packGridKwh" value="60" min="0" step="1">
+                        <small>Automatic folder-bagger, carton taper, pallet stretch wrapper</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="packGasKwh">Thermal Energy / Heat Shrink Tunnel Gas (kWh)</label>
+                        <input type="number" id="packGasKwh" value="40" min="0" step="1">
+                        <small>Shrink film heat chamber or steam tunnel</small>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- DISABLED NOTIFICATION (WHEN STAGE IS SWITCHED OFF) -->
+        <div id="segmentDisabledNoticePackaging" class="segment-disabled-notice" style="display: none;">
+            <h3>Packaging Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All cartons, plastic bags, hangtags, and packaging machinery power are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate packaging emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions" style="margin-top: 2.5rem; justify-content: space-between;">
+            <div>
+                <a href="etp.html" class="btn-secondary">&larr; Back to ETP</a>
+            </div>
+            <div>
+                <button type="button" class="btn-calculate-launch" onclick="executeFullCalculation()">
+                    Calculate Footprint &amp; View Results &rarr;
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`Packaging stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentPackaging');
+            const notice = document.getElementById('segmentDisabledNoticePackaging');
+            const toggleInput = document.getElementById('chkIncludePackaging');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includePackaging: document.getElementById('chkIncludePackaging').checked,
+                packPlasticKg: parseFloat(document.getElementById('packPlasticKg').value) || 0,
+                packPlasticEF: parseFloat(document.getElementById('packPlasticEF').value) || 0,
+                packCardboardKg: parseFloat(document.getElementById('packCardboardKg').value) || 0,
+                packCardboardEF: parseFloat(document.getElementById('packCardboardEF').value) || 0,
+                packPaperTagsKg: parseFloat(document.getElementById('packPaperTagsKg').value) || 0,
+                packPaperTagsEF: parseFloat(document.getElementById('packPaperTagsEF').value) || 0,
+                packHangersKg: parseFloat(document.getElementById('packHangersKg').value) || 0,
+                packHangersEF: parseFloat(document.getElementById('packHangersEF').value) || 0,
+                packGridKwh: parseFloat(document.getElementById('packGridKwh').value) || 0,
+                packGasKwh: parseFloat(document.getElementById('packGasKwh').value) || 0
+            });
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isPackOn = state.includePackaging !== false;
+            updateSegmentUI(isPackOn);
+
+            document.getElementById('packPlasticKg').value = state.packPlasticKg !== undefined ? state.packPlasticKg : 20;
+            document.getElementById('packPlasticEF').value = state.packPlasticEF !== undefined ? state.packPlasticEF : 3.10;
+            document.getElementById('packCardboardKg').value = state.packCardboardKg !== undefined ? state.packCardboardKg : 30;
+            document.getElementById('packCardboardEF').value = state.packCardboardEF !== undefined ? state.packCardboardEF : 0.94;
+            document.getElementById('packPaperTagsKg').value = state.packPaperTagsKg !== undefined ? state.packPaperTagsKg : 5;
+            document.getElementById('packPaperTagsEF').value = state.packPaperTagsEF !== undefined ? state.packPaperTagsEF : 1.10;
+            document.getElementById('packHangersKg').value = state.packHangersKg !== undefined ? state.packHangersKg : 8;
+            document.getElementById('packHangersEF').value = state.packHangersEF !== undefined ? state.packHangersEF : 2.20;
+            document.getElementById('packGridKwh').value = state.packGridKwh !== undefined ? state.packGridKwh : 60;
+            document.getElementById('packGasKwh').value = state.packGasKwh !== undefined ? state.packGasKwh : 40;
+        }
+
+        function executeFullCalculation() {
+            saveCurrentInputs();
+            const results = calculateProjectFootprint();
+            if (results) {
+                window.location.href = 'results.html';
+            } else {
+                showToast('Error calculating results. Check values.', 'warning');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            document.querySelectorAll('input').forEach(el => {
+                el.addEventListener('input', saveCurrentInputs);
+                el.addEventListener('change', saveCurrentInputs);
+            });
+        });
+    </script>
+</body>
+</html>

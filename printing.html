@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textile Printing - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link active">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (9 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Textile Printing &amp; Graphic Coloration</h1>
+            <p class="page-subtitle">Configure continuous roll-to-roll fabric printing (rotary, flatbed, digital inkjet) and apparel placement printing (screen, DTG, sublimation, discharge).</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">Printing Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude fabric printing and apparel placement embellishments from your lifecycle footprint.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle Printing Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludePrinting" checked onchange="handleSegmentToggle('includePrinting', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentPrinting">
+            <!-- SECTION 1: Printing Classification & Technology -->
+            <section class="card" id="sec-print-tech">
+                <div class="card-header-styled">
+                    <h2><span>Printing Methodology &amp; Equipment</span></h2>
+                    <span class="badge-tag">Technology</span>
+                </div>
+                <p class="section-desc">Select the printing technology and pattern coverage applied to your textile materials.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="printType">Printing Application Scope</label>
+                        <select id="printType">
+                            <option value="all">Combined (Fabric Roll Printing &amp; Apparel Embellishment)</option>
+                            <option value="fabric">Continuous Fabric Roll Printing (Yardage)</option>
+                            <option value="garment">Apparel / Panel Placement Printing (Cut pieces &amp; Garments)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="printMethod">Primary Printing Technology</label>
+                        <select id="printMethod">
+                            <option value="rotary">Rotary Screen Printing (Continuous high-speed yardage)</option>
+                            <option value="flatbed">Flatbed Screen Printing (Automated precision carriage)</option>
+                            <option value="digital">Digital Inkjet Printing (Direct-to-Fabric roll)</option>
+                            <option value="dtg">Direct-to-Garment (DTG) Digital Inkjet</option>
+                            <option value="screen">Automatic Carousel Screen Printing (Plastisol / Water-based)</option>
+                            <option value="transfer">Heat Transfer / Sublimation Film</option>
+                            <option value="discharge">Discharge Printing (Color extraction &amp; substitution)</option>
+                            <option value="specialty">Specialty Effects (Foil, Puff, High-Density)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="printCoveragePercent">Estimated Pattern Print Coverage (%)</label>
+                        <input type="number" id="printCoveragePercent" value="65" min="1" max="100" step="1">
+                        <small>Average coverage of printed surface area across production volume</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Printing Energy Consumption -->
+            <section class="card" id="sec-print-energy">
+                <div class="card-header-styled">
+                    <h2><span>Printing Energy Consumption</span></h2>
+                    <span class="badge-tag badge-amber">Energy</span>
+                </div>
+                <p class="section-desc">Electrical power for drives, exposure, digital printheads, and thermal energy for curing tunnel ovens and loop steamers.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="printGridKwh">Grid Electricity for Printing (kWh)</label>
+                        <input type="number" id="printGridKwh" value="350" min="0" step="1">
+                        <small>Carousels, rotary cylinders, screen exposure, flash curing units</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="printGasKwh">Natural Gas / Thermal Energy for Curing &amp; Steaming (kWh)</label>
+                        <input type="number" id="printGasKwh" value="850" min="0" step="1">
+                        <small>Conveyor dryer ovens, polymerization tunnels, fixative loop steamers</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="printRenewableKwh">Renewable Electricity (kWh)</label>
+                        <input type="number" id="printRenewableKwh" value="0" min="0" step="1">
+                        <small>On-site rooftop solar PV or purchased green renewable power</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Printing Water Consumption -->
+            <section class="card" id="sec-print-water">
+                <div class="card-header-styled">
+                    <h2><span>Water Demand &amp; Washing Operations</span></h2>
+                    <span class="badge-tag badge-blue">Water</span>
+                </div>
+                <p class="section-desc">Water consumed in print paste preparation, continuous belt/blanket washing, and screen reclamation.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="printWaterFresh">Freshwater Consumption (L)</label>
+                        <input type="number" id="printWaterFresh" value="18000" min="0" step="1">
+                        <small>Blanket washer, post-print wash-off baths, squeegee cleaning</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="printWaterRecycled">Recycled / Reclaimed Water (L)</label>
+                        <input type="number" id="printWaterRecycled" value="0" min="0" step="1">
+                        <small>Water recycled from screen recovery rinse or internal mill recycling</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Printing Pastes, Inks, Binders & Additives -->
+            <section class="card" id="sec-print-chems">
+                <div class="card-header-styled">
+                    <h2><span>Printing Inks, Binders &amp; Chemical Auxiliaries</span></h2>
+                    <span class="badge-tag">Chemicals</span>
+                </div>
+                <p class="section-desc">
+                    Formulation recipes for pigment pastes, plastisols, water-based inks, reactive inks, binders, and thickeners. Select "Other" to input custom chemical names and save for future use.
+                </p>
+
+                <div id="printChemContainer" class="chem-container"></div>
+                <button type="button" class="btn-add-chem" onclick="addPrintChemRow()">
+                    + Add Printing Chemical
+                </button>
+            </section>
+        </div>
+
+        <!-- EXCLUSION NOTICE WHEN SWITCHED OFF -->
+        <div id="segmentDisabledNoticePrinting" class="segment-disabled-notice" style="display: none;">
+            <h3>Printing Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All fabric printing and garment printing energy, water, and chemical emissions are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate textile printing emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions">
+            <div>
+                <a href="wet-processing.html" class="btn-secondary">&larr; Back to Wet Processing</a>
+            </div>
+            <div>
+                <a href="garments.html" class="btn-primary">
+                    Proceed to Garment Manufacturing &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`Printing stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentPrinting');
+            const notice = document.getElementById('segmentDisabledNoticePrinting');
+            const toggleInput = document.getElementById('chkIncludePrinting');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function addPrintChemRow() {
+            addChemRowToContainer('printChemContainer', 'printChem', {
+                key: 'binder',
+                qty: 15,
+                ef: 3.20
+            });
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includePrinting: document.getElementById('chkIncludePrinting').checked,
+                printType: document.getElementById('printType').value,
+                printMethod: document.getElementById('printMethod').value,
+                printCoveragePercent: parseFloat(document.getElementById('printCoveragePercent').value) || 65,
+                printGridKwh: parseFloat(document.getElementById('printGridKwh').value) || 0,
+                printGasKwh: parseFloat(document.getElementById('printGasKwh').value) || 0,
+                printRenewableKwh: parseFloat(document.getElementById('printRenewableKwh').value) || 0,
+                printWaterFresh: parseFloat(document.getElementById('printWaterFresh').value) || 0,
+                printWaterRecycled: parseFloat(document.getElementById('printWaterRecycled').value) || 0
+            });
+            syncChemRowData('printChem');
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isPrintOn = state.includePrinting !== false;
+            updateSegmentUI(isPrintOn);
+
+            document.getElementById('printType').value = state.printType || 'all';
+            document.getElementById('printMethod').value = state.printMethod || 'rotary';
+            document.getElementById('printCoveragePercent').value = state.printCoveragePercent !== undefined ? state.printCoveragePercent : 65;
+            document.getElementById('printGridKwh').value = state.printGridKwh !== undefined ? state.printGridKwh : 350;
+            document.getElementById('printGasKwh').value = state.printGasKwh !== undefined ? state.printGasKwh : 850;
+            document.getElementById('printRenewableKwh').value = state.printRenewableKwh !== undefined ? state.printRenewableKwh : 0;
+            document.getElementById('printWaterFresh').value = state.printWaterFresh !== undefined ? state.printWaterFresh : 18000;
+            document.getElementById('printWaterRecycled').value = state.printWaterRecycled !== undefined ? state.printWaterRecycled : 0;
+
+            const printContainer = document.getElementById('printChemContainer');
+            printContainer.innerHTML = '';
+            const pChems = (state.printChems && state.printChems.length > 0) ? state.printChems : [
+                { key: 'pigment_paste', qty: 30, ef: 5.00 },
+                { key: 'binder', qty: 20, ef: 3.20 },
+                { key: 'thickener', qty: 15, ef: 1.50 }
+            ];
+            pChems.forEach(c => {
+                addChemRowToContainer('printChemContainer', 'printChem', c);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            const inputs = document.querySelectorAll('input:not([type="checkbox"]), select');
+            inputs.forEach(input => {
+                input.addEventListener('change', saveCurrentInputs);
+                input.addEventListener('input', debounce(saveCurrentInputs, 500));
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #cffafe;
+            gap: 0.5rem;
+        }
+        .auth-tab-btn {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #155e75;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .auth-tab-btn.active {
+            color: #0891b2;
+            border-bottom-color: #0891b2;
+        }
+        .auth-tab-btn:hover {
+            color: #0891b2;
+        }
+        .admin-hint-box {
+            background: #ecfeff;
+            border: 1px solid #a5f3fc;
+            border-radius: var(--radius-sm);
+            padding: 0.65rem 0.85rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.82rem;
+            color: #0e7490;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .auth-alert {
+            padding: 0.65rem 0.85rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .auth-alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .auth-alert-success {
+            background: #ecfeff;
+            color: #0891b2;
+            border: 1px solid #a5f3fc;
+        }
+    </style>
+</head>
+<body class="auth-page-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo-badge" style="background:#0891b2; color:#fff; font-weight:800; font-size:0.9rem;">LCA</div>
+            <h1 class="auth-title">Textile LCA Portal</h1>
+            <p class="auth-subtitle">Carbon &amp; Water Footprint Assessment System</p>
+        </div>
+
+        <!-- Auth Tabs: Sign In / Register -->
+        <div class="auth-tabs">
+            <button type="button" class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">
+                Sign In
+            </button>
+            <button type="button" class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">
+                Register New User
+            </button>
+        </div>
+
+        <div id="authAlert" class="auth-alert"></div>
+
+        <!-- SIGN IN FORM -->
+        <div id="loginSection">
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="loginIdentifier">Username or Email</label>
+                    <input type="text" id="loginIdentifier" placeholder="e.g. admin or engineer@textile.eco" required autocomplete="username">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" checked> Remember this device
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">
+                    Sign In to Portal &rarr;
+                </button>
+            </form>
+        </div>
+
+        <!-- REGISTER NEW USER FORM -->
+        <div id="registerSection" style="display: none;">
+            <p style="font-size: 0.85rem; color: #155e75; margin-bottom: 1rem;">
+                Create a new user account. Your orders and calculations will be saved to your profile database.
+            </p>
+
+            <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+                <div class="form-group" style="margin-bottom: 0.8rem;">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="e.g. Sarah Jenkins" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0.8rem;">
+                    <label for="regCompany">Mill / Company Name</label>
+                    <input type="text" id="regCompany" placeholder="e.g. Apex Spinning &amp; Weaving Mills Ltd." required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0.8rem;">
+                    <label for="regUsername">Username</label>
+                    <input type="text" id="regUsername" placeholder="e.g. sjenkins" required autocomplete="username">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0.8rem;">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="e.g. sarah@apexmills.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.2rem;">
+                    <label for="regPassword">Password (minimum 4 characters)</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" minlength="4" required autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">
+                    Create Account &amp; Sign In &rarr;
+                </button>
+            </form>
+        </div>
+
+        <p style="text-align: center; margin-top: 1.5rem; font-size: 0.78rem; color: var(--text-light);">
+            Textile Carbon &amp; Water Footprint Assessment System &bull; ISO 14040/44 LCA
+        </p>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        function switchAuthTab(tab) {
+            const loginSec = document.getElementById('loginSection');
+            const regSec = document.getElementById('registerSection');
+            const tabLogin = document.getElementById('tabBtnLogin');
+            const tabReg = document.getElementById('tabBtnRegister');
+            const alertBox = document.getElementById('authAlert');
+            alertBox.style.display = 'none';
+
+            if (tab === 'register') {
+                loginSec.style.display = 'none';
+                regSec.style.display = 'block';
+                tabLogin.classList.remove('active');
+                tabReg.classList.add('active');
+            } else {
+                loginSec.style.display = 'block';
+                regSec.style.display = 'none';
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+            }
+        }
+
+        function showAlert(msg, isSuccess = false) {
+            const alertBox = document.getElementById('authAlert');
+            alertBox.className = 'auth-alert ' + (isSuccess ? 'auth-alert-success' : 'auth-alert-error');
+            alertBox.textContent = msg;
+            alertBox.style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof syncUsersFromCloud === 'function') {
+                syncUsersFromCloud().catch(err => console.warn('Background user sync notice:', err));
+            }
+        });
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('loginIdentifier').value;
+            const password = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('rememberMe').checked;
+
+            try {
+                let res = loginUser(identifier, password, remember);
+                // If local check failed, check central cloud database for newly registered accounts
+                if (!res.success && typeof syncUsersFromCloud === 'function') {
+                    showAlert('Verifying credentials with central database...', false);
+                    try {
+                        await syncUsersFromCloud();
+                        res = loginUser(identifier, password, remember);
+                    } catch (err) {
+                        console.warn('Cloud sync on login error:', err);
+                    }
+                }
+
+                if (res.success) {
+                    showAlert('Login successful! Redirecting...', true);
+                    const isSystemAdmin = res.user && res.user.username && res.user.username.toLowerCase() === 'admin';
+                    const redirectTarget = isSystemAdmin ? 'admin.html' : 'index.html';
+                    setTimeout(() => {
+                        window.location.href = redirectTarget;
+                    }, 300);
+                } else {
+                    showAlert(res.message || 'Login failed.');
+                }
+            } catch (err) {
+                console.error('Login submit error:', err);
+                showAlert('Error processing login: ' + (err.message || 'Please try again.'));
+            }
+        }
+
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const company = document.getElementById('regCompany').value;
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            const res = registerUser({ name, company, username, email, password });
+            if (res.success) {
+                // Automatically log in the newly registered user
+                loginUser(username, password, true);
+                showAlert('Account registered successfully! Redirecting...', true);
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 400);
+            } else {
+                showAlert(res.message || 'Registration failed.');
+            }
+        }
+    </script>
+</body>
+</html>

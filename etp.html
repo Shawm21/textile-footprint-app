@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wastewater Treatment (ETP) - Textile Footprint Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <span class="brand-icon">LCA</span>
+                <span>Textile Footprint Calculator</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Production</a></li>
+                <li><a href="spinning.html" class="nav-link">Spinning</a></li>
+                <li><a href="fabrication.html" class="nav-link">Fabrication</a></li>
+                <li><a href="wet-processing.html" class="nav-link">Wet Processing</a></li>
+                <li><a href="printing.html" class="nav-link">Printing</a></li>
+                <li><a href="garments.html" class="nav-link">Garments</a></li>
+                <li><a href="etp.html" class="nav-link active">ETP</a></li>
+                <li><a href="packaging.html" class="nav-link">Packaging</a></li>
+                <li><a href="results.html" class="nav-link">Results</a></li>
+                <li><a href="chemicals.html" class="nav-link">Chemical Library</a></li>
+                <li><a href="profile.html" class="nav-link">Orders &amp; Profile</a></li>
+            </ul>
+            <div class="user-nav-slot"></div>
+        </div>
+    </header>
+
+    <!-- Progress Stepper (8 Steps) -->
+    <div class="stepper-bar-container">
+        <div class="stepper-bar">
+            <a href="index.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Production</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="spinning.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Spinning</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="fabrication.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Fabrication</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="wet-processing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Wet Processing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="printing.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Printing</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="garments.html" class="step-item completed">
+                <span class="step-number">•</span>
+                <span>Garments</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="etp.html" class="step-item active">
+                <span class="step-number">•</span>
+                <span>ETP</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="packaging.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Packaging</span>
+            </a>
+            <div class="step-divider"></div>
+            <a href="results.html" class="step-item">
+                <span class="step-number">•</span>
+                <span>Results</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main>
+        <div class="page-intro">
+            <h1 class="page-title">Wastewater Treatment Plant (ETP / ZLD)</h1>
+            <p class="page-subtitle">Configure biological, physical-chemical effluent treatment, coagulation reagents, sludge disposal, and water recycling.</p>
+        </div>
+
+        <!-- MASTER SEGMENT ON/OFF TOGGLE SWITCH -->
+        <div class="segment-switch-card" id="segmentSwitchBanner">
+            <div class="segment-switch-info">
+                <span class="segment-status-badge" id="segmentStatusBadge">Segment Active</span>
+                <h3 class="segment-switch-title">ETP Stage Switch</h3>
+                <p class="segment-switch-desc">Toggle to include or completely exclude on-site wastewater treatment plant energy, chemicals, and sludge footprint.</p>
+            </div>
+            <div class="switch-toggle-wrap">
+                <label class="switch-toggle" title="Toggle ETP Stage ON / OFF">
+                    <input type="checkbox" id="chkIncludeEtp" checked onchange="handleSegmentToggle('includeEtp', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <span class="switch-state-text" id="switchStateText">ON</span>
+            </div>
+        </div>
+
+        <!-- SEGMENT CONTENT CONTAINER -->
+        <div id="segmentContentEtp">
+            <!-- SECTION: Wastewater Treatment (ETP) -->
+            <section class="card" id="sec-wastewater">
+                <div class="card-header-styled">
+                    <h2><span>ETP Facility Operations</span></h2>
+                    <span class="badge-tag">Effluent Remediation</span>
+                </div>
+                <p class="section-desc">Effluent treatment aeration blower energy, transfer pumps, coagulants, flocculants, sludge disposal, and water recovery.</p>
+
+                <div id="etpDetails">
+                    <h3>ETP Energy Consumption</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="etpGridKwh">Grid Electricity for Aeration &amp; Pumps (kWh)</label>
+                            <input type="number" id="etpGridKwh" value="300" min="0" step="1">
+                            <small>Aeration blowers, clarifier drives, filter press, dosing pumps</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="etpGasKwh">Thermal Energy / Biogas (kWh)</label>
+                            <input type="number" id="etpGasKwh" value="0" min="0" step="1">
+                            <small>Sludge thermal drying or anaerobic digester heating</small>
+                        </div>
+                    </div>
+
+                    <h3>ETP Treatment Chemicals</h3>
+                    <p class="section-desc">
+                        Coagulants (Alum, PAC, Ferric Chloride), flocculants, and neutralizing reagents. Select "Other" to input and save your custom chemical.
+                    </p>
+
+                    <div id="etpChemContainer" class="chem-container"></div>
+                    <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('etpChemContainer', 'etpChem', { key: 'alum', qty: 30, ef: 0.45 })">
+                        + Add ETP Chemical
+                    </button>
+
+                    <h3 style="margin-top: 1.4rem;">Sludge Generation &amp; Water Recovery</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="etpSludgeKg">Dry Sludge Generated (kg)</label>
+                            <input type="number" id="etpSludgeKg" value="100" min="0" step="1">
+                            <small>Hazardous/chemical biological dewatered sludge cake</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="etpSludgeEF">Sludge Disposal EF (kg CO₂e/kg dry sludge)</label>
+                            <input type="number" id="etpSludgeEF" value="0.5" min="0" step="0.01">
+                            <small>Incineration ~0.8, Secured landfill ~0.5, Brick making ~0.2</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="etpWaterRecovered">Water Recovered from ETP/RO Reused in Factory (L)</label>
+                            <input type="number" id="etpWaterRecovered" value="0" min="0" step="1">
+                            <small>Permeate recycled to process via Zero Liquid Discharge (ZLD) or RO plant</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- DISABLED NOTIFICATION (WHEN STAGE IS SWITCHED OFF) -->
+        <div id="segmentDisabledNoticeEtp" class="segment-disabled-notice" style="display: none;">
+            <h3>ETP Stage is Switched OFF</h3>
+            <p>This entire process stage is currently excluded from your lifecycle assessment. All wastewater aeration electricity, treatment chemicals, and sludge emissions are set to 0.</p>
+            <p>Toggle the switch above to <strong>ON</strong> if you wish to configure and calculate ETP emissions.</p>
+        </div>
+
+        <!-- Page Navigation Actions -->
+        <div class="page-nav-actions" style="margin-top: 2.5rem; justify-content: space-between;">
+            <div>
+                <a href="garments.html" class="btn-secondary">&larr; Back to Garments</a>
+            </div>
+            <div>
+                <a href="packaging.html" class="btn-primary">
+                    Next: Packaging Materials &amp; Operations &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Textile Carbon &amp; Water Footprint Calculator &bull; Multi-Stage LCA Engine</p>
+        <p>Emission factors based on IPCC, Higg MSI, ecoinvent, and textile mill benchmarks.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/chemicals-data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        function handleSegmentToggle(stateKey, isChecked) {
+            updateProjectState({ [stateKey]: isChecked, chkETP: isChecked });
+            updateSegmentUI(isChecked);
+            showToast(`ETP stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+        }
+
+        function updateSegmentUI(isActive) {
+            const banner = document.getElementById('segmentSwitchBanner');
+            const badge = document.getElementById('segmentStatusBadge');
+            const stateText = document.getElementById('switchStateText');
+            const content = document.getElementById('segmentContentEtp');
+            const notice = document.getElementById('segmentDisabledNoticeEtp');
+            const toggleInput = document.getElementById('chkIncludeEtp');
+
+            toggleInput.checked = isActive;
+
+            if (isActive) {
+                banner.classList.remove('segment-off');
+                badge.classList.remove('off');
+                badge.textContent = 'Segment Active';
+                stateText.classList.remove('off');
+                stateText.textContent = 'ON';
+                content.style.display = 'block';
+                notice.style.display = 'none';
+            } else {
+                banner.classList.add('segment-off');
+                badge.classList.add('off');
+                badge.textContent = 'Segment OFF (Excluded)';
+                stateText.classList.add('off');
+                stateText.textContent = 'OFF';
+                content.style.display = 'none';
+                notice.style.display = 'block';
+            }
+        }
+
+        function saveCurrentInputs() {
+            updateProjectState({
+                includeEtp: document.getElementById('chkIncludeEtp').checked,
+                chkETP: document.getElementById('chkIncludeEtp').checked,
+                etpGridKwh: parseFloat(document.getElementById('etpGridKwh').value) || 0,
+                etpGasKwh: parseFloat(document.getElementById('etpGasKwh').value) || 0,
+                etpSludgeKg: parseFloat(document.getElementById('etpSludgeKg').value) || 0,
+                etpSludgeEF: parseFloat(document.getElementById('etpSludgeEF').value) || 0,
+                etpWaterRecovered: parseFloat(document.getElementById('etpWaterRecovered').value) || 0
+            });
+
+            syncChemRowData('etpChem');
+        }
+
+        function populateForm() {
+            const state = getProjectState();
+
+            const isEtpOn = state.includeEtp !== false && state.chkETP !== false;
+            updateSegmentUI(isEtpOn);
+
+            document.getElementById('etpGridKwh').value = state.etpGridKwh !== undefined ? state.etpGridKwh : 300;
+            document.getElementById('etpGasKwh').value = state.etpGasKwh !== undefined ? state.etpGasKwh : 0;
+            document.getElementById('etpSludgeKg').value = state.etpSludgeKg !== undefined ? state.etpSludgeKg : 100;
+            document.getElementById('etpSludgeEF').value = state.etpSludgeEF !== undefined ? state.etpSludgeEF : 0.50;
+            document.getElementById('etpWaterRecovered').value = state.etpWaterRecovered || 0;
+
+            // Populate ETP chemicals
+            const etpContainer = document.getElementById('etpChemContainer');
+            etpContainer.innerHTML = '';
+            (state.etpChems || [{ key: 'pac', qty: 45, ef: 0.85 }, { key: 'poly_flocculant', qty: 5, ef: 2.9 }]).forEach(c => {
+                addChemRowToContainer('etpChemContainer', 'etpChem', c);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateForm();
+
+            document.querySelectorAll('input:not(.chem-qty):not(.chem-ef):not(.chem-custom-name), select:not(.chem-select)').forEach(el => {
+                el.addEventListener('input', saveCurrentInputs);
+                el.addEventListener('change', saveCurrentInputs);
+            });
+        });
+    </script>
+</body>
+</html>
