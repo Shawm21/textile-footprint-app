@@ -490,7 +490,6 @@ main {
     min-width: 250px;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
 }
 
 .chem-select {
@@ -506,7 +505,7 @@ main {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.2rem;
+    margin-top: 0.4rem;
 }
 
 .chem-custom-name {
@@ -537,16 +536,19 @@ main {
 
 .chem-input-wrap {
     flex: 1;
-    min-width: 110px;
+    min-width: 120px;
     display: flex;
     flex-direction: column;
 }
 
 .compact-label {
-    font-size: 0.73rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 0.15rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: block;
 }
 
 .chem-qty, .chem-ef {
