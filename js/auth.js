@@ -396,9 +396,12 @@ function saveOrderToDB(orderInput = {}) {
     }
 
     const totalCarbon = results ? results.totalCarbon : 0;
-    const carbonIntensity = results ? results.carbonIntensity : 0;
+    const carbonIntensity = results ? (results.carbonPerKg || results.carbonIntensity || 0) : 0;
+    const netCarbon = results ? (results.netCarbon !== undefined ? results.netCarbon : Math.max(0, totalCarbon - (results.carbonSavedRenew || 0))) : 0;
+    const netCarbonIntensity = results ? (results.netCarbonPerKg !== undefined ? results.netCarbonPerKg : (netCarbon / (state.productionWeight || 1000))) : 0;
+    const carbonAvoided = results ? (results.carbonSavedRenew || 0) : 0;
     const totalWater = results ? results.totalWater : 0;
-    const waterIntensity = results ? results.waterIntensity : 0;
+    const waterIntensity = results ? (results.waterPerKg || results.waterIntensity || 0) : 0;
 
     const orderId = orderInput.orderId || ('PO-' + Date.now().toString(36).toUpperCase());
     const fabricTitle = state.fabricType ? (state.fabricType.charAt(0).toUpperCase() + state.fabricType.slice(1)) : 'Fabric';
@@ -418,6 +421,9 @@ function saveOrderToDB(orderInput = {}) {
         productionWeight: state.productionWeight || 1000,
         totalCarbon: totalCarbon,
         carbonIntensity: carbonIntensity,
+        netCarbon: netCarbon,
+        netCarbonIntensity: netCarbonIntensity,
+        carbonAvoided: carbonAvoided,
         totalWater: totalWater,
         waterIntensity: waterIntensity,
         stateSnapshot: JSON.parse(JSON.stringify(state)),

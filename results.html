@@ -121,10 +121,24 @@
         <!-- 1. EXECUTIVE KPI SUMMARY TILES -->
         <div class="results-kpi-grid">
             <div class="kpi-card kpi-carbon">
-                <div class="kpi-title">Total Carbon Footprint</div>
+                <div class="kpi-title">Total Carbon Footprint (Gross)</div>
                 <div class="kpi-value" id="totalCarbon">0</div>
                 <div class="kpi-unit">kg CO₂e</div>
                 <div class="kpi-intensity" id="carbonPerKg">0.0 kg CO₂e / kg fabric</div>
+            </div>
+
+            <div class="kpi-card kpi-net" style="border-left-color: #059669; background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%);">
+                <div class="kpi-title" style="color: #059669; font-weight: 700;">Net Carbon Footprint</div>
+                <div class="kpi-value" id="netCarbon" style="color: #059669;">0</div>
+                <div class="kpi-unit">kg CO₂e (After Avoided)</div>
+                <div class="kpi-intensity" id="netCarbonPerKg" style="color: #047857; font-weight: 600;">0.00 kg CO₂e / kg fabric</div>
+            </div>
+
+            <div class="kpi-card kpi-renew">
+                <div class="kpi-title">Carbon Avoided (Renewables)</div>
+                <div class="kpi-value" id="carbonSavedRenewable">0</div>
+                <div class="kpi-unit">kg CO₂e Saved</div>
+                <div class="kpi-intensity" style="color: #6a1b9a;">Clean Power Substitution</div>
             </div>
 
             <div class="kpi-card kpi-water">
@@ -147,14 +161,38 @@
                 <div class="kpi-unit">Litres (Rain + Recycled)</div>
                 <div class="kpi-intensity" style="color: #0891b2;">Circular Water Conservation</div>
             </div>
-
-            <div class="kpi-card kpi-renew">
-                <div class="kpi-title">Carbon Avoided (Renewables)</div>
-                <div class="kpi-value" id="carbonSavedRenewable">0</div>
-                <div class="kpi-unit">kg CO₂e Saved</div>
-                <div class="kpi-intensity" style="color: #6a1b9a;">Clean Power Substitution</div>
-            </div>
         </div>
+
+        <!-- NET CARBON FOOTPRINT CALCULATION EQUATION BLOCK -->
+        <section class="card" style="border-left: 4px solid #10b981; background: #f0fdf4; margin-bottom: 1.5rem;">
+            <div class="card-header-styled">
+                <h2><span>Net Carbon Footprint Balance &amp; Calculation</span></h2>
+                <span class="badge-tag" style="background: #10b981; color: white;">GHG Protocol Balance</span>
+            </div>
+            <p class="section-desc" style="color: #166534; margin-bottom: 1.2rem;">
+                Net carbon footprint is calculated by subtracting carbon avoided through on-site clean renewable electricity generation from the total gross production emissions:
+            </p>
+
+            <div class="carbon-balance-equation-box">
+                <div class="calc-box-item">
+                    <span class="calc-box-label">Total Carbon Footprint (Gross)</span>
+                    <span class="calc-box-val" id="calcGrossCarbon">0 kg CO₂e</span>
+                    <span class="calc-box-sub" id="calcGrossIntensity">0.00 kg CO₂e/kg</span>
+                </div>
+                <div class="calc-box-operator">&minus;</div>
+                <div class="calc-box-item">
+                    <span class="calc-box-label">Carbon Avoided (Renewables)</span>
+                    <span class="calc-box-val" id="calcAvoidedCarbon" style="color: #7c3aed;">0 kg CO₂e</span>
+                    <span class="calc-box-sub">On-site solar / wind displacement</span>
+                </div>
+                <div class="calc-box-operator">=</div>
+                <div class="calc-box-item calc-box-result">
+                    <span class="calc-box-label">Net Carbon Footprint</span>
+                    <span class="calc-box-val" id="calcNetCarbon" style="color: #059669;">0 kg CO₂e</span>
+                    <span class="calc-box-sub" id="calcNetIntensity">0.00 kg CO₂e/kg fabric</span>
+                </div>
+            </div>
+        </section>
 
         <!-- 2. STAGE BREAKDOWN TABLE -->
         <section class="card">
@@ -285,12 +323,26 @@
 
             // Executive KPIs
             document.getElementById('totalCarbon').textContent = formatNum(r.totalCarbon, 1);
+            document.getElementById('netCarbon').textContent = formatNum(r.netCarbon !== undefined ? r.netCarbon : Math.max(0, r.totalCarbon - (r.carbonSavedRenew || 0)), 1);
+            document.getElementById('netCarbonPerKg').textContent = `${formatNum(r.netCarbonPerKg !== undefined ? r.netCarbonPerKg : (r.netCarbon || (r.totalCarbon - (r.carbonSavedRenew || 0))) / pw, 2)} kg CO₂e / kg fabric`;
+            document.getElementById('carbonSavedRenewable').textContent = formatNum(r.carbonSavedRenew, 1);
+
             document.getElementById('totalWater').textContent = formatNum(r.totalWater, 0);
             document.getElementById('carbonPerKg').textContent = `${formatNum(r.carbonPerKg, 2)} kg CO₂e / kg fabric`;
             document.getElementById('waterPerKg').textContent = `${formatNum(r.waterPerKg, 1)} L / kg fabric`;
             document.getElementById('totalFreshWater').textContent = formatNum(r.totalFreshWater, 0);
             document.getElementById('totalSavedWater').textContent = formatNum(r.totalSavedWater, 0);
-            document.getElementById('carbonSavedRenewable').textContent = formatNum(r.carbonSavedRenew, 1);
+
+            // Net Carbon Equation Box
+            const avoided = r.carbonSavedRenew || 0;
+            const netVal = r.netCarbon !== undefined ? r.netCarbon : Math.max(0, r.totalCarbon - avoided);
+            const netInt = r.netCarbonPerKg !== undefined ? r.netCarbonPerKg : (netVal / pw);
+
+            document.getElementById('calcGrossCarbon').textContent = `${formatNum(r.totalCarbon, 1)} kg CO₂e`;
+            document.getElementById('calcGrossIntensity').textContent = `${formatNum(r.carbonPerKg, 2)} kg CO₂e/kg`;
+            document.getElementById('calcAvoidedCarbon').textContent = `${formatNum(avoided, 1)} kg CO₂e`;
+            document.getElementById('calcNetCarbon').textContent = `${formatNum(netVal, 1)} kg CO₂e`;
+            document.getElementById('calcNetIntensity').textContent = `${formatNum(netInt, 2)} kg CO₂e/kg fabric`;
 
             // 1. Stage Breakdown Table
             const tbody = document.getElementById('breakdownBody');
@@ -406,13 +458,15 @@
             csv += `Formation Method,${r.weaveType}\n`;
             csv += `Finished Production Weight (kg),${r.prodWeight}\n\n`;
 
-            csv += `Total Carbon Footprint (kg CO2e),${r.totalCarbon.toFixed(2)}\n`;
-            csv += `Carbon Intensity (kg CO2e/kg fabric),${r.carbonPerKg.toFixed(3)}\n`;
+            csv += `Total Carbon Footprint (Gross kg CO2e),${r.totalCarbon.toFixed(2)}\n`;
+            csv += `Gross Carbon Intensity (kg CO2e/kg fabric),${r.carbonPerKg.toFixed(3)}\n`;
+            csv += `Carbon Avoided via Renewables (kg CO2e),${r.carbonSavedRenew.toFixed(2)}\n`;
+            csv += `Net Carbon Footprint (kg CO2e),${(r.netCarbon !== undefined ? r.netCarbon : Math.max(0, r.totalCarbon - r.carbonSavedRenew)).toFixed(2)}\n`;
+            csv += `Net Carbon Intensity (kg CO2e/kg fabric),${(r.netCarbonPerKg !== undefined ? r.netCarbonPerKg : (r.netCarbon || (r.totalCarbon - r.carbonSavedRenew)) / r.prodWeight).toFixed(3)}\n`;
             csv += `Total Water Footprint (L),${r.totalWater.toFixed(0)}\n`;
             csv += `Water Intensity (L/kg fabric),${r.waterPerKg.toFixed(1)}\n`;
             csv += `Freshwater Consumed (L),${r.totalFreshWater.toFixed(0)}\n`;
-            csv += `Water Saved via Rain & Recycled (L),${r.totalSavedWater.toFixed(0)}\n`;
-            csv += `Carbon Avoided via Renewables (kg CO2e),${r.carbonSavedRenew.toFixed(2)}\n\n`;
+            csv += `Water Saved via Rain & Recycled (L),${r.totalSavedWater.toFixed(0)}\n\n`;
 
             csv += 'STAGE-BY-STAGE BREAKDOWN\n';
             csv += 'Stage,Carbon (kg CO2e),Water (L),Details\n';

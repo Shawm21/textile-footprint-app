@@ -125,63 +125,95 @@
             </div>
         </section>
 
-        <!-- SECTION: General Energy Sources -->
+        <!-- SECTION: General Energy Sources & Factory Utilities (Reference Only) -->
         <section class="card" id="sec-energy">
             <div class="card-header-styled">
-                <h2><span>Factory Energy Mix &amp; Utilities</span></h2>
-                <span class="badge-tag badge-blue">Baseline Utilities</span>
+                <h2><span>Factory Utilities Overview &amp; Emission Benchmarks</span></h2>
+                <span class="badge-tag badge-blue">Display Only &bull; Reference Benchmarks</span>
             </div>
-            <p class="section-desc">Define your mill's energy consumption profile and emission factors.</p>
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: 6px; padding: 0.9rem 1.1rem; margin-bottom: 1.4rem; font-size: 0.88rem; color: #1e40af; line-height: 1.5;">
+                <strong>LCA Accounting Note:</strong> The baseline electricity, water, and fuel values entered in this section serve as factory-wide reference metrics and emission factor definitions. To prevent double counting in lifecycle assessment, process-specific electricity and water consumption are calculated directly across each manufacturing segment (Spinning through Packaging) and are <em>not</em> added twice.
+            </div>
 
-            <h3>National Grid Electricity</h3>
+            <h3>National Grid Electricity (Facility Baseline)</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="gridElectricity">Grid Electricity Consumed (kWh)</label>
+                    <label for="gridElectricity">Grid Electricity Consumed (kWh) [Reference Only]</label>
                     <input type="number" id="gridElectricity" value="5000" min="0" step="1">
+                    <small>Factory monthly/batch electricity meter reading (Displayed for overview, not calculated into process stages)</small>
                 </div>
                 <div class="form-group">
                     <label for="gridEF">Grid Emission Factor (kg CO₂e/kWh)</label>
-                    <input type="number" id="gridEF" value="0.85" min="0" step="0.001">
-                    <small>Country grid averages: India ~0.82, China ~0.58, US ~0.42, EU ~0.30</small>
+                    <input type="number" id="gridEF" value="0.85" min="0" step="0.001" oninput="handleGridEFChange()">
+                    <small>Applied to all manufacturing stages: India ~0.82, China ~0.58, US ~0.42, EU ~0.30</small>
                 </div>
             </div>
 
-            <h3>Natural Gas (Boilers &amp; Thermal Energy)</h3>
+            <h3>Factory Water Intake (Facility Baseline)</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="natGasKwh">Natural Gas Consumed (kWh)</label>
-                    <input type="number" id="natGasKwh" value="8000" min="0" step="1">
+                    <label for="facilityWaterL">Total Facility Water Consumed (Litres) [Reference Only]</label>
+                    <input type="number" id="facilityWaterL" value="150000" min="0" step="1">
+                    <small>Total municipal / borewell intake for entire facility (Displayed for reference, stage water calculated per process)</small>
                 </div>
                 <div class="form-group">
-                    <label for="natGasEF">Natural Gas Emission Factor (kg CO₂e/kWh)</label>
-                    <input type="number" id="natGasEF" value="0.184" min="0" step="0.001">
-                    <small>Default IPCC combustion factor: 0.184 kg CO₂e/kWh</small>
-                </div>
-            </div>
-
-            <h3>On-site Renewable Energy (Solar PV / Wind)</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="renewableKwh">Renewable Electricity Used (kWh)</label>
+                    <label for="renewableKwh">On-site Renewable Electricity Generated (kWh)</label>
                     <input type="number" id="renewableKwh" value="1000" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="renewableEF">Renewable Emission Factor (kg CO₂e/kWh)</label>
-                    <input type="number" id="renewableEF" value="0.0" min="0" step="0.001">
-                    <small>Zero for Scope 2 direct; set 0.02 - 0.04 if factoring lifecycle</small>
+                    <small>Clean solar PV / wind power generated to displace grid power (Credited as Carbon Avoided)</small>
                 </div>
             </div>
 
-            <h3>Other Fuel (Diesel Generators, Coal, Biomass)</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="otherFuelKwh">Other Fuel Energy (kWh)</label>
-                    <input type="number" id="otherFuelKwh" value="0" min="0" step="1">
+                    <label for="renewableEF">Renewable Electricity EF (kg CO₂e/kWh)</label>
+                    <input type="number" id="renewableEF" value="0.0" min="0" step="0.001">
+                    <small>0.0 for direct zero-carbon renewable energy generation</small>
                 </div>
                 <div class="form-group">
-                    <label for="otherFuelEF">Other Fuel Emission Factor (kg CO₂e/kWh)</label>
-                    <input type="number" id="otherFuelEF" value="0.32" min="0" step="0.001">
+                    <label for="otherFuelEF">Other Fuel EF (kg CO₂e/kWh)</label>
+                    <input type="number" id="otherFuelEF" value="0.32" min="0" step="0.001" oninput="handleOtherFuelEFChange()">
                     <small>Coal ~0.34, Diesel generator ~0.25, Biomass pellets ~0.03-0.08</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Boiler & Thermal Energy Generation System -->
+        <section class="card" id="sec-boiler" style="border-left: 4px solid #f97316;">
+            <div class="card-header-styled">
+                <h2><span>Central Boiler &amp; Process Steam Generation System</span></h2>
+                <span class="badge-tag badge-amber">Boiler Fuel &amp; Thermal Energy</span>
+            </div>
+            <p class="section-desc">
+                Configure your textile mill's central boiler house. Boilers generate process steam and thermal energy for dyeing, washing, drying, and heat-setting. The boiler can operate on Natural Gas, Grid Electricity, or Other Fuel.
+            </p>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="boilerFuelType">Boiler Fuel / Power Source</label>
+                    <select id="boilerFuelType" onchange="handleBoilerFuelChange()">
+                        <option value="natural_gas">Natural Gas (Standard Gas-Fired Boiler)</option>
+                        <option value="electricity">Electricity (Electric Boiler / Electrode Steam Generator)</option>
+                        <option value="other_fuel">Other Fuel (Biomass, Diesel, Coal, Heavy Fuel Oil)</option>
+                    </select>
+                    <small>The selected boiler fuel emission factor is applied to process steam across all stages</small>
+                </div>
+                <div class="form-group">
+                    <label for="boilerEF">Boiler Thermal Emission Factor (kg CO₂e/kWh)</label>
+                    <input type="number" id="boilerEF" value="0.184" min="0" step="0.001">
+                    <small id="boilerEFHint">Natural gas standard factor: 0.184 kg CO₂e/kWh</small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="boilerEfficiency">Boiler Operating Thermal Efficiency (%)</label>
+                    <input type="number" id="boilerEfficiency" value="85" min="40" max="99" step="1">
+                    <small>Standard modern textile steam boilers operate between 80% and 88% efficiency</small>
+                </div>
+                <div class="form-group">
+                    <label for="natGasKwh">Boiler Reference Fuel / Energy Intake (kWh) [Reference Only]</label>
+                    <input type="number" id="natGasKwh" value="8000" min="0" step="1">
+                    <small>Boiler fuel intake reference (Displayed for reference, stage steam computed per process)</small>
                 </div>
             </div>
         </section>
@@ -230,6 +262,42 @@
             saveCurrentInputs();
         }
 
+        function handleBoilerFuelChange() {
+            const fuel = document.getElementById('boilerFuelType').value;
+            const efInput = document.getElementById('boilerEF');
+            const hint = document.getElementById('boilerEFHint');
+            const gridEF = parseFloat(document.getElementById('gridEF').value) || 0.85;
+            const otherEF = parseFloat(document.getElementById('otherFuelEF').value) || 0.32;
+
+            if (fuel === 'electricity') {
+                efInput.value = gridEF;
+                hint.textContent = `Electric boiler inherits grid EF: ${gridEF} kg CO₂e/kWh`;
+            } else if (fuel === 'other_fuel') {
+                efInput.value = otherEF;
+                hint.textContent = `Other fuel boiler EF: ${otherEF} kg CO₂e/kWh (Biomass, Diesel, Coal)`;
+            } else {
+                efInput.value = 0.184;
+                hint.textContent = 'Natural gas standard factor: 0.184 kg CO₂e/kWh';
+            }
+            saveCurrentInputs();
+        }
+
+        function handleGridEFChange() {
+            const fuel = document.getElementById('boilerFuelType').value;
+            if (fuel === 'electricity') {
+                document.getElementById('boilerEF').value = document.getElementById('gridEF').value;
+            }
+            saveCurrentInputs();
+        }
+
+        function handleOtherFuelEFChange() {
+            const fuel = document.getElementById('boilerFuelType').value;
+            if (fuel === 'other_fuel') {
+                document.getElementById('boilerEF').value = document.getElementById('otherFuelEF').value;
+            }
+            saveCurrentInputs();
+        }
+
         function saveCurrentInputs() {
             updateProjectState({
                 fabricType: document.getElementById('fabricType').value,
@@ -238,12 +306,14 @@
                 polyRatio: parseFloat(document.getElementById('polyRatio').value) || 40,
                 gridElectricity: parseFloat(document.getElementById('gridElectricity').value) || 0,
                 gridEF: parseFloat(document.getElementById('gridEF').value) || 0,
+                facilityWaterL: parseFloat(document.getElementById('facilityWaterL').value) || 0,
                 natGasKwh: parseFloat(document.getElementById('natGasKwh').value) || 0,
-                natGasEF: parseFloat(document.getElementById('natGasEF').value) || 0,
                 renewableKwh: parseFloat(document.getElementById('renewableKwh').value) || 0,
                 renewableEF: parseFloat(document.getElementById('renewableEF').value) || 0,
-                otherFuelKwh: parseFloat(document.getElementById('otherFuelKwh').value) || 0,
-                otherFuelEF: parseFloat(document.getElementById('otherFuelEF').value) || 0
+                otherFuelEF: parseFloat(document.getElementById('otherFuelEF').value) || 0,
+                boilerFuelType: document.getElementById('boilerFuelType').value,
+                boilerEF: parseFloat(document.getElementById('boilerEF').value) || 0.184,
+                boilerEfficiency: parseFloat(document.getElementById('boilerEfficiency').value) || 85
             });
         }
 
@@ -254,16 +324,29 @@
             document.getElementById('cottonRatio').value = state.cottonRatio || 60;
             document.getElementById('polyRatio').value = state.polyRatio || 40;
 
-            document.getElementById('gridElectricity').value = state.gridElectricity;
-            document.getElementById('gridEF').value = state.gridEF;
-            document.getElementById('natGasKwh').value = state.natGasKwh;
-            document.getElementById('natGasEF').value = state.natGasEF;
-            document.getElementById('renewableKwh').value = state.renewableKwh;
-            document.getElementById('renewableEF').value = state.renewableEF;
-            document.getElementById('otherFuelKwh').value = state.otherFuelKwh;
-            document.getElementById('otherFuelEF').value = state.otherFuelEF;
+            document.getElementById('gridElectricity').value = state.gridElectricity !== undefined ? state.gridElectricity : 5000;
+            document.getElementById('gridEF').value = state.gridEF !== undefined ? state.gridEF : 0.85;
+            document.getElementById('facilityWaterL').value = state.facilityWaterL !== undefined ? state.facilityWaterL : 150000;
+            document.getElementById('renewableKwh').value = state.renewableKwh !== undefined ? state.renewableKwh : 1000;
+            document.getElementById('renewableEF').value = state.renewableEF !== undefined ? state.renewableEF : 0.0;
+            document.getElementById('otherFuelEF').value = state.otherFuelEF !== undefined ? state.otherFuelEF : 0.32;
+
+            document.getElementById('boilerFuelType').value = state.boilerFuelType || 'natural_gas';
+            document.getElementById('boilerEF').value = state.boilerEF !== undefined ? state.boilerEF : 0.184;
+            document.getElementById('boilerEfficiency').value = state.boilerEfficiency !== undefined ? state.boilerEfficiency : 85;
+            document.getElementById('natGasKwh').value = state.natGasKwh !== undefined ? state.natGasKwh : 8000;
 
             handleFabricTypeChange();
+            // Update boiler hint based on current state
+            const fuel = document.getElementById('boilerFuelType').value;
+            const hint = document.getElementById('boilerEFHint');
+            if (fuel === 'electricity') {
+                hint.textContent = `Electric boiler inherits grid EF: ${document.getElementById('gridEF').value} kg CO₂e/kWh`;
+            } else if (fuel === 'other_fuel') {
+                hint.textContent = `Other fuel boiler EF: ${document.getElementById('otherFuelEF').value} kg CO₂e/kWh (Biomass, Diesel, Coal)`;
+            } else {
+                hint.textContent = 'Natural gas standard factor: 0.184 kg CO₂e/kWh';
+            }
         }
 
         function resetFormToDefaults() {

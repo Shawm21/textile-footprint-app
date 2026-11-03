@@ -14,9 +14,25 @@ function calculateProjectFootprint(customState = null) {
 
     // Energy EFs
     const gridEF = parseFloat(s.gridEF) || 0;
-    const gasEF = parseFloat(s.natGasEF) || 0;
     const renewEF = parseFloat(s.renewableEF) || 0;
     const otherFuelEF = parseFloat(s.otherFuelEF) || 0;
+
+    // Central Boiler & Process Steam Configuration
+    // The boiler can operate on Natural Gas, Grid Electricity, or Other Fuel
+    const boilerFuelType = s.boilerFuelType || 'natural_gas';
+    let boilerEF = 0.184;
+    if (s.boilerEF !== undefined && s.boilerEF !== null && s.boilerEF !== '') {
+        boilerEF = parseFloat(s.boilerEF);
+    } else if (boilerFuelType === 'electricity') {
+        boilerEF = gridEF;
+    } else if (boilerFuelType === 'other_fuel') {
+        boilerEF = otherFuelEF || 0.32;
+    } else {
+        boilerEF = parseFloat(s.natGasEF) || 0.184;
+    }
+
+    // Thermal & Process Steam emission factor applied to all manufacturing stages
+    const gasEF = boilerEF;
 
     const stages = [];
 
@@ -340,26 +356,9 @@ function calculateProjectFootprint(customState = null) {
         details: isEtpOn ? `${(s.etpChems || []).length} coagulants/flocculants, sludge disposal` : 'Switched OFF (Excluded)'
     });
 
-    // --- 9. General Factory Energy (overhead) ---
-    const genGrid = parseFloat(s.gridElectricity) || 0;
-    const genGas = parseFloat(s.natGasKwh) || 0;
-    const genRenew = parseFloat(s.renewableKwh) || 0;
-    const genOther = parseFloat(s.otherFuelKwh) || 0;
-    const genCarbon = (genGrid * gridEF) + (genGas * gasEF) + (genRenew * renewEF) + (genOther * otherFuelEF);
-
-    stages.push({
-        name: 'General Factory Energy (Facility Baseline)',
-        stageKey: 'general_energy',
-        carbon: genCarbon,
-        water: 0,
-        freshWater: 0,
-        rainWater: 0,
-        recycledWater: 0,
-        gridKwh: genGrid,
-        gasKwh: genGas,
-        renewKwh: genRenew,
-        details: `${genGrid} kWh Grid, ${genGas} kWh Natural Gas`
-    });
+    // NOTE: Factory general energy and water on the first page are reference benchmarks
+    // and are NOT double-counted into totalCarbon or totalWater to prevent duplication.
+    // Process-specific energy and water are accumulated from individual stages below.
 
     // NOTE: TRANSPORTATION REMOVED PER REQUIREMENT 4!
 
@@ -420,16 +419,26 @@ function calculateProjectFootprint(customState = null) {
     });
 
     const totalOtherKwh = parseFloat(s.otherFuelKwh) || 0;
-    const carbonSavedRenew = totalRenewKwh * Math.max(0, (gridEF - renewEF));
+    const facilityRenewKwh = parseFloat(s.renewableKwh) || 0;
+    const effectiveRenewKwh = Math.max(totalRenewKwh, facilityRenewKwh);
+    const carbonSavedRenew = effectiveRenewKwh * Math.max(0, (gridEF - renewEF));
     const totalSavedWater = totalRainWater + totalRecycledWater;
-    const etpRecovered = s.chkETP ? (parseFloat(s.etpWaterRecovered) || 0) : 0;
+    const etpRecovered = (s.includeEtp !== false && s.chkETP !== false) ? (parseFloat(s.etpWaterRecovered) || 0) : 0;
+
+    // Net Carbon Footprint (Total Gross Footprint - Carbon Avoided through Renewables)
+    const netCarbon = Math.max(0, totalCarbon - carbonSavedRenew);
+    const netCarbonPerKg = prodWeight > 0 ? (netCarbon / prodWeight) : 0;
 
     // Energy Sources Breakdown
+    let boilerLabel = 'Natural Gas Steam Boiler';
+    if (boilerFuelType === 'electricity') boilerLabel = 'Electric Boiler / Electrode Steam Generator';
+    else if (boilerFuelType === 'other_fuel') boilerLabel = 'Other Fuel Boiler (Biomass/Diesel/Coal)';
+
     const energySources = [
-        { name: 'National Grid Electricity', kwh: totalGridKwh, carbon: totalGridKwh * gridEF, ef: gridEF },
-        { name: 'Natural Gas (Boilers & Steam)', kwh: totalGasKwh, carbon: totalGasKwh * gasEF, ef: gasEF },
-        { name: 'On-site Renewable (Solar/Wind)', kwh: totalRenewKwh, carbon: totalRenewKwh * renewEF, ef: renewEF },
-        { name: 'Other Fuel (Diesel/Coal/Biomass)', kwh: totalOtherKwh, carbon: totalOtherKwh * otherFuelEF, ef: otherFuelEF }
+        { name: 'National Grid Electricity (Process Stages)', kwh: totalGridKwh, carbon: totalGridKwh * gridEF, ef: gridEF },
+        { name: `Process Steam / Thermal Energy (${boilerLabel})`, kwh: totalGasKwh, carbon: totalGasKwh * gasEF, ef: gasEF },
+        { name: 'On-site Renewable Electricity (Clean Generation)', kwh: effectiveRenewKwh, carbon: effectiveRenewKwh * renewEF, ef: renewEF },
+        { name: 'Other Fuel (Generators & Auxiliaries)', kwh: totalOtherKwh, carbon: totalOtherKwh * otherFuelEF, ef: otherFuelEF }
     ];
 
     // Water Sources Breakdown
@@ -449,11 +458,15 @@ function calculateProjectFootprint(customState = null) {
         totalWater: totalWater,
         carbonPerKg: prodWeight > 0 ? (totalCarbon / prodWeight) : 0,
         waterPerKg: prodWeight > 0 ? (totalWater / prodWeight) : 0,
+        netCarbon: netCarbon,
+        netCarbonPerKg: netCarbonPerKg,
         totalFreshWater: totalFreshWater,
         totalRainWater: totalRainWater,
         totalRecycledWater: totalRecycledWater,
         totalSavedWater: totalSavedWater,
         carbonSavedRenew: carbonSavedRenew,
+        boilerFuelType: boilerFuelType,
+        boilerEF: boilerEF,
         stages: stages,
         energySources: energySources,
         waterSources: waterSources,

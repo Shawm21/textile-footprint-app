@@ -23,15 +23,23 @@ function getDefaultState() {
         cottonRatio: 60,
         polyRatio: 40,
 
-        // 2. Factory General Energy Mix
+        // 2. Factory General Energy & Utilities (Reference Benchmarks - Display Only)
         gridElectricity: 5000,
         gridEF: 0.85,
-        natGasKwh: 8000,
-        natGasEF: 0.184,
+        facilityWaterL: 150000,
         renewableKwh: 1000,
         renewableEF: 0.0,
         otherFuelKwh: 0,
         otherFuelEF: 0.32,
+
+        // 2b. Boiler & Process Steam Generation System
+        boilerFuelType: 'natural_gas', // 'natural_gas' | 'electricity' | 'other_fuel'
+        boilerEF: 0.184,               // kg CO2e/kWh (natural_gas: 0.184, electricity: gridEF, other_fuel: 0.32)
+        boilerEfficiency: 85,          // %
+        boilerCapacityTph: 5.0,        // Tons steam/hr
+        boilerRatedPressureBar: 10,    // Bar
+        natGasKwh: 8000,               // Reference baseline fuel/steam energy
+        natGasEF: 0.184,
 
         // 3. Spinning
         spinGridKwh: 800,
@@ -271,6 +279,7 @@ function createChemRowHtml(category, chemData) {
     return `
         <div class="chem-row" id="${chemId}" data-category="${category}">
             <div class="chem-select-wrap">
+                <label class="compact-label">Chemical Name</label>
                 <select class="chem-select" onchange="handleChemSelectChange(this, '${category}')">
                     ${options}
                 </select>
