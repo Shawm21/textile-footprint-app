@@ -1177,6 +1177,141 @@ main {
     margin: 0;
 }
 
+/* ==========================================================================
+   INTERACTIVE SLIDING BUTTON STAGE SWITCH (NO CHECKBOX)
+   ========================================================================== */
+.sliding-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.sliding-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+
+.sliding-button:hover {
+    transform: scale(1.03);
+}
+
+.sliding-button:active {
+    transform: scale(0.97);
+}
+
+.sliding-button:focus-visible {
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.4);
+    border-radius: 42px;
+}
+
+.sliding-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 104px;
+    height: 42px;
+    padding: 3px;
+    border-radius: 42px;
+    background: #cbd5e1;
+    border: 2px solid #94a3b8;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(255, 255, 255, 0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+.sliding-track-label {
+    flex: 1;
+    text-align: center;
+    font-size: 0.84rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    z-index: 2;
+    transition: color 0.3s ease;
+    user-select: none;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.sliding-thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: 48px;
+    border-radius: 36px;
+    background: #ffffff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.14);
+    z-index: 1;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ACTIVE (ON) STATE */
+.sliding-button.active .sliding-track {
+    background: #0891b2;
+    border-color: #0e7490;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.sliding-button.active .sliding-thumb {
+    transform: translateX(0);
+    background: #ffffff;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(8, 145, 178, 0.25);
+}
+
+.sliding-button.active .sliding-track-label.on-label {
+    color: #0891b2;
+    font-weight: 900;
+}
+
+.sliding-button.active .sliding-track-label.off-label {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+/* INACTIVE (OFF) STATE */
+.sliding-button:not(.active) .sliding-track {
+    background: #94a3b8;
+    border-color: #64748b;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sliding-button:not(.active) .sliding-thumb {
+    transform: translateX(46px);
+    background: #ffffff;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.32);
+}
+
+.sliding-button:not(.active) .sliding-track-label.on-label {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.sliding-button:not(.active) .sliding-track-label.off-label {
+    color: #334155;
+    font-weight: 900;
+}
+
+.sliding-button-text {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #0891b2;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sliding-button-text.off {
+    color: #64748b;
+}
+
+/* Legacy fallback classes */
 .switch-toggle-wrap {
     display: flex;
     flex-direction: column;
@@ -1195,62 +1330,6 @@ main {
 
 .switch-toggle-wrap .switch-state-text.off {
     color: #64748b;
-}
-
-/* Enlarge on/off toggle and convert to modern slider button */
-.switch-toggle {
-    position: relative;
-    display: inline-block;
-    width: 76px;
-    height: 38px;
-    flex-shrink: 0;
-}
-
-.switch-toggle input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.switch-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #cbd5e1;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 38px;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.18), 0 1px 2px rgba(255,255,255,0.7);
-    border: 1px solid #94a3b8;
-}
-
-.switch-slider:before {
-    position: absolute;
-    content: "";
-    height: 30px;
-    width: 30px;
-    left: 4px;
-    bottom: 3px;
-    background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 50%;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.28), 0 1px 2px rgba(0,0,0,0.15);
-    border: 1px solid rgba(0,0,0,0.06);
-}
-
-.switch-toggle input:checked + .switch-slider {
-    background-color: #0891b2;
-    border-color: #0e7490;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
-}
-
-.switch-toggle input:checked + .switch-slider:before {
-    transform: translateX(36px);
-    background: #ffffff;
-    box-shadow: 0 3px 9px rgba(0,0,0,0.32), 0 0 0 1px rgba(8,145,178,0.3);
-}
-
-.switch-toggle:hover .switch-slider:before {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
 
 .segment-disabled-notice {

@@ -264,6 +264,38 @@ function showToast(message, type = 'success') {
 }
 
 /**
+ * Global Controller for Sliding Button Stage On/Off Switches (No Checkbox)
+ */
+function handleSliderButtonClick(stateKey) {
+    const state = getProjectState();
+    const isCurrentlyActive = state[stateKey] !== false;
+    const newActiveState = !isCurrentlyActive;
+
+    const updates = { [stateKey]: newActiveState };
+    if (stateKey === 'includeEtp') updates.chkETP = newActiveState;
+    if (stateKey === 'includePrinting') updates.chkPrinting = newActiveState;
+    if (stateKey === 'includeGarments') updates.chkGarments = newActiveState;
+
+    updateProjectState(updates);
+
+    if (typeof updateSegmentUI === 'function') {
+        updateSegmentUI(newActiveState);
+    }
+
+    const stageTitles = {
+        includeSpinning: 'Spinning',
+        includeFabrication: 'Fabrication',
+        includeWetProcessing: 'Wet Processing',
+        includePrinting: 'Printing',
+        includeGarments: 'Garments',
+        includeEtp: 'ETP',
+        includePackaging: 'Packaging'
+    };
+
+    showToast(`${stageTitles[stateKey] || 'Stage'} is now switched ${newActiveState ? 'ON' : 'OFF'}.`, newActiveState ? 'success' : 'info');
+}
+
+/**
  * Render a dynamic chemical row
  */
 function createChemRowHtml(category, chemData) {

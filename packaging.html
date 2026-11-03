@@ -95,12 +95,21 @@
                 <h3 class="segment-switch-title">Packaging Stage Switch</h3>
                 <p class="segment-switch-desc">Toggle to include or completely exclude secondary packaging materials and packing line energy from your lifecycle footprint.</p>
             </div>
-            <div class="switch-toggle-wrap">
-                <label class="switch-toggle" title="Toggle Packaging Stage ON / OFF">
-                    <input type="checkbox" id="chkIncludePackaging" checked onchange="handleSegmentToggle('includePackaging', this.checked)">
-                    <span class="switch-slider"></span>
-                </label>
-                <span class="switch-state-text" id="switchStateText">ON</span>
+            <div class="sliding-button-container">
+                <button type="button" 
+                        class="sliding-button active" 
+                        id="btnSliderPackaging" 
+                        role="switch" 
+                        aria-checked="true" 
+                        title="Click to slide switch between ON and OFF" 
+                        onclick="handleSliderButtonClick('includePackaging')">
+                    <span class="sliding-track">
+                        <span class="sliding-track-label on-label">ON</span>
+                        <span class="sliding-track-label off-label">OFF</span>
+                        <span class="sliding-thumb"></span>
+                    </span>
+                </button>
+                <span class="sliding-button-text" id="switchStateText">ON</span>
             </div>
         </div>
 
@@ -220,9 +229,7 @@
     <script src="js/calculator.js"></script>
     <script>
         function handleSegmentToggle(stateKey, isChecked) {
-            updateProjectState({ [stateKey]: isChecked });
-            updateSegmentUI(isChecked);
-            showToast(`Packaging stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+            handleSliderButtonClick(stateKey);
         }
 
         function updateSegmentUI(isActive) {
@@ -231,9 +238,17 @@
             const stateText = document.getElementById('switchStateText');
             const content = document.getElementById('segmentContentPackaging');
             const notice = document.getElementById('segmentDisabledNoticePackaging');
-            const toggleInput = document.getElementById('chkIncludePackaging');
+            const sliderBtn = document.getElementById('btnSliderPackaging');
 
-            toggleInput.checked = isActive;
+            if (sliderBtn) {
+                if (isActive) {
+                    sliderBtn.classList.add('active');
+                    sliderBtn.setAttribute('aria-checked', 'true');
+                } else {
+                    sliderBtn.classList.remove('active');
+                    sliderBtn.setAttribute('aria-checked', 'false');
+                }
+            }
 
             if (isActive) {
                 banner.classList.remove('segment-off');
@@ -255,8 +270,11 @@
         }
 
         function saveCurrentInputs() {
+            const sliderBtn = document.getElementById('btnSliderPackaging');
+            const isPackOn = sliderBtn ? sliderBtn.classList.contains('active') : true;
+
             updateProjectState({
-                includePackaging: document.getElementById('chkIncludePackaging').checked,
+                includePackaging: isPackOn,
                 packPlasticKg: parseFloat(document.getElementById('packPlasticKg').value) || 0,
                 packPlasticEF: parseFloat(document.getElementById('packPlasticEF').value) || 0,
                 packCardboardKg: parseFloat(document.getElementById('packCardboardKg').value) || 0,

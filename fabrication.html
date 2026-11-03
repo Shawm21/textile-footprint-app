@@ -95,12 +95,21 @@
                 <h3 class="segment-switch-title">Fabrication Stage Switch</h3>
                 <p class="segment-switch-desc">Toggle to include or completely exclude fabric weaving or knitting machinery emissions and sizing chemicals.</p>
             </div>
-            <div class="switch-toggle-wrap">
-                <label class="switch-toggle" title="Toggle Fabrication Stage ON / OFF">
-                    <input type="checkbox" id="chkIncludeFabrication" checked onchange="handleSegmentToggle('includeFabrication', this.checked)">
-                    <span class="switch-slider"></span>
-                </label>
-                <span class="switch-state-text" id="switchStateText">ON</span>
+            <div class="sliding-button-container">
+                <button type="button" 
+                        class="sliding-button active" 
+                        id="btnSliderFabrication" 
+                        role="switch" 
+                        aria-checked="true" 
+                        title="Click to slide switch between ON and OFF" 
+                        onclick="handleSliderButtonClick('includeFabrication')">
+                    <span class="sliding-track">
+                        <span class="sliding-track-label on-label">ON</span>
+                        <span class="sliding-track-label off-label">OFF</span>
+                        <span class="sliding-thumb"></span>
+                    </span>
+                </button>
+                <span class="sliding-button-text" id="switchStateText">ON</span>
             </div>
         </div>
 
@@ -211,9 +220,7 @@
     <script src="js/calculator.js"></script>
     <script>
         function handleSegmentToggle(stateKey, isChecked) {
-            updateProjectState({ [stateKey]: isChecked });
-            updateSegmentUI(isChecked);
-            showToast(`Fabrication stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+            handleSliderButtonClick(stateKey);
         }
 
         function updateSegmentUI(isActive) {
@@ -222,26 +229,42 @@
             const stateText = document.getElementById('switchStateText');
             const content = document.getElementById('segmentContentFabrication');
             const notice = document.getElementById('segmentDisabledNoticeFabrication');
-            const toggleInput = document.getElementById('chkIncludeFabrication');
+            const sliderBtn = document.getElementById('btnSliderFabrication');
 
-            toggleInput.checked = isActive;
+            if (sliderBtn) {
+                if (isActive) {
+                    sliderBtn.classList.add('active');
+                    sliderBtn.setAttribute('aria-checked', 'true');
+                } else {
+                    sliderBtn.classList.remove('active');
+                    sliderBtn.setAttribute('aria-checked', 'false');
+                }
+            }
 
             if (isActive) {
-                banner.classList.remove('segment-off');
-                badge.classList.remove('off');
-                badge.textContent = 'Segment Active';
-                stateText.classList.remove('off');
-                stateText.textContent = 'ON';
-                content.style.display = 'block';
-                notice.style.display = 'none';
+                if (banner) banner.classList.remove('segment-off');
+                if (badge) {
+                    badge.classList.remove('off');
+                    badge.textContent = 'Segment Active';
+                }
+                if (stateText) {
+                    stateText.classList.remove('off');
+                    stateText.textContent = 'ON';
+                }
+                if (content) content.style.display = 'block';
+                if (notice) notice.style.display = 'none';
             } else {
-                banner.classList.add('segment-off');
-                badge.classList.add('off');
-                badge.textContent = 'Segment OFF (Excluded)';
-                stateText.classList.add('off');
-                stateText.textContent = 'OFF';
-                content.style.display = 'none';
-                notice.style.display = 'block';
+                if (banner) banner.classList.add('segment-off');
+                if (badge) {
+                    badge.classList.add('off');
+                    badge.textContent = 'Segment OFF (Excluded)';
+                }
+                if (stateText) {
+                    stateText.classList.add('off');
+                    stateText.textContent = 'OFF';
+                }
+                if (content) content.style.display = 'none';
+                if (notice) notice.style.display = 'block';
             }
         }
 
@@ -274,8 +297,11 @@
         }
 
         function saveCurrentInputs() {
+            const sliderBtn = document.getElementById('btnSliderFabrication');
+            const isFabOn = sliderBtn ? sliderBtn.classList.contains('active') : true;
+
             updateProjectState({
-                includeFabrication: document.getElementById('chkIncludeFabrication').checked,
+                includeFabrication: isFabOn,
                 weaveType: document.getElementById('weaveType').value,
                 weaveGridKwh: parseFloat(document.getElementById('weaveGridKwh').value) || 0,
                 weaveGasKwh: parseFloat(document.getElementById('weaveGasKwh').value) || 0,

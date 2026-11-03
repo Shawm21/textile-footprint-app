@@ -95,12 +95,21 @@
                 <h3 class="segment-switch-title">ETP Stage Switch</h3>
                 <p class="segment-switch-desc">Toggle to include or completely exclude on-site wastewater treatment plant energy, chemicals, and sludge footprint.</p>
             </div>
-            <div class="switch-toggle-wrap">
-                <label class="switch-toggle" title="Toggle ETP Stage ON / OFF">
-                    <input type="checkbox" id="chkIncludeEtp" checked onchange="handleSegmentToggle('includeEtp', this.checked)">
-                    <span class="switch-slider"></span>
-                </label>
-                <span class="switch-state-text" id="switchStateText">ON</span>
+            <div class="sliding-button-container">
+                <button type="button" 
+                        class="sliding-button active" 
+                        id="btnSliderEtp" 
+                        role="switch" 
+                        aria-checked="true" 
+                        title="Click to slide switch between ON and OFF" 
+                        onclick="handleSliderButtonClick('includeEtp')">
+                    <span class="sliding-track">
+                        <span class="sliding-track-label on-label">ON</span>
+                        <span class="sliding-track-label off-label">OFF</span>
+                        <span class="sliding-thumb"></span>
+                    </span>
+                </button>
+                <span class="sliding-button-text" id="switchStateText">ON</span>
             </div>
         </div>
 
@@ -196,9 +205,7 @@
     <script src="js/calculator.js"></script>
     <script>
         function handleSegmentToggle(stateKey, isChecked) {
-            updateProjectState({ [stateKey]: isChecked, chkETP: isChecked });
-            updateSegmentUI(isChecked);
-            showToast(`ETP stage is now switched ${isChecked ? 'ON' : 'OFF'}.`, isChecked ? 'success' : 'info');
+            handleSliderButtonClick(stateKey);
         }
 
         function updateSegmentUI(isActive) {
@@ -207,9 +214,17 @@
             const stateText = document.getElementById('switchStateText');
             const content = document.getElementById('segmentContentEtp');
             const notice = document.getElementById('segmentDisabledNoticeEtp');
-            const toggleInput = document.getElementById('chkIncludeEtp');
+            const sliderBtn = document.getElementById('btnSliderEtp');
 
-            toggleInput.checked = isActive;
+            if (sliderBtn) {
+                if (isActive) {
+                    sliderBtn.classList.add('active');
+                    sliderBtn.setAttribute('aria-checked', 'true');
+                } else {
+                    sliderBtn.classList.remove('active');
+                    sliderBtn.setAttribute('aria-checked', 'false');
+                }
+            }
 
             if (isActive) {
                 banner.classList.remove('segment-off');
@@ -231,9 +246,12 @@
         }
 
         function saveCurrentInputs() {
+            const sliderBtn = document.getElementById('btnSliderEtp');
+            const isEtpOn = sliderBtn ? sliderBtn.classList.contains('active') : true;
+
             updateProjectState({
-                includeEtp: document.getElementById('chkIncludeEtp').checked,
-                chkETP: document.getElementById('chkIncludeEtp').checked,
+                includeEtp: isEtpOn,
+                chkETP: isEtpOn,
                 etpGridKwh: parseFloat(document.getElementById('etpGridKwh').value) || 0,
                 etpGasKwh: parseFloat(document.getElementById('etpGasKwh').value) || 0,
                 etpSludgeKg: parseFloat(document.getElementById('etpSludgeKg').value) || 0,
