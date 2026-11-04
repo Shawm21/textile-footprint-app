@@ -139,80 +139,49 @@ function calculateProjectFootprint(customState = null) {
         details: weaveChemSummary
     });
 
-    // --- 3. Pre-treatment ---
+    // --- 3. Pre-treatment & Dyeing (Unified Energy & Water: Calculated Only Once) ---
+    // Electricity required & water consumption are taken only once for both Pre-treatment and Dyeing.
     const isWetProcessOn = s.includeWetProcessing !== false;
-    let preCarbon = 0, preWater = 0, preFresh = 0, preRain = 0, preRecycled = 0;
-    let preGrid = 0, preGas = 0, preRenew = 0;
+    let preDyeCarbon = 0, preDyeWater = 0, preDyeFresh = 0, preDyeRain = 0, preDyeRecycled = 0;
+    let preDyeGrid = 0, preDyeGas = 0, preDyeRenew = 0;
 
     if (isWetProcessOn) {
-        preGrid = parseFloat(s.preGridKwh) || 0;
-        preGas = parseFloat(s.preGasKwh) || 0;
-        preRenew = parseFloat(s.preRenewableKwh) || 0;
-        
+        preDyeGrid = parseFloat(s.dyeGridKwh) || 0;
+        preDyeGas = parseFloat(s.dyeGasKwh) || 0;
+        preDyeRenew = parseFloat(s.dyeRenewableKwh) || 0;
+
         let preChemCarbon = 0;
         (s.preChems || []).forEach(c => {
             preChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
-
-        preCarbon = (preGrid * gridEF) + (preGas * gasEF) + (preRenew * renewEF) + preChemCarbon;
-        preFresh = parseFloat(s.preWaterFresh) || 0;
-        preRain = parseFloat(s.preWaterRain) || 0;
-        preRecycled = parseFloat(s.preWaterRecycled) || 0;
-        preWater = preFresh + preRain + preRecycled;
-    }
-
-    stages.push({
-        name: isWetProcessOn ? 'Pre-treatment (Scour, Bleach, Mercerize)' : 'Pre-treatment (Switched OFF)',
-        stageKey: 'pretreatment',
-        carbon: preCarbon,
-        water: preWater,
-        freshWater: preFresh,
-        rainWater: preRain,
-        recycledWater: preRecycled,
-        gridKwh: preGrid,
-        gasKwh: preGas,
-        renewKwh: preRenew,
-        details: isWetProcessOn ? `${(s.preChems || []).length} process chemicals` : 'Wet Processing switched OFF'
-    });
-
-    // --- 4. Wet Processing: Pre-treatment ---
-
-    // --- 5. Dyeing ---
-    let dyeCarbon = 0, dyeWater = 0, dyeFresh = 0, dyeRain = 0, dyeRecycled = 0;
-    let dyeGrid = 0, dyeGas = 0, dyeRenew = 0;
-
-    if (isWetProcessOn) {
-        dyeGrid = parseFloat(s.dyeGridKwh) || 0;
-        dyeGas = parseFloat(s.dyeGasKwh) || 0;
-        dyeRenew = parseFloat(s.dyeRenewableKwh) || 0;
 
         let dyeChemCarbon = 0;
         (s.dyeChems || []).forEach(c => {
             dyeChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        dyeCarbon = (dyeGrid * gridEF) + (dyeGas * gasEF) + (dyeRenew * renewEF) + dyeChemCarbon;
-        dyeFresh = parseFloat(s.dyeWaterFresh) || 0;
-        dyeRain = parseFloat(s.dyeWaterRain) || 0;
-        dyeRecycled = parseFloat(s.dyeWaterRecycled) || 0;
-        dyeWater = dyeFresh + dyeRain + dyeRecycled;
+        preDyeCarbon = (preDyeGrid * gridEF) + (preDyeGas * gasEF) + (preDyeRenew * renewEF) + preChemCarbon + dyeChemCarbon;
+        preDyeFresh = parseFloat(s.dyeWaterFresh) || 0;
+        preDyeRain = parseFloat(s.dyeWaterRain) || 0;
+        preDyeRecycled = parseFloat(s.dyeWaterRecycled) || 0;
+        preDyeWater = preDyeFresh + preDyeRain + preDyeRecycled;
     }
 
     stages.push({
-        name: isWetProcessOn ? `Dyeing (${s.dyeMethod || 'exhaust'}, ${s.dyeClass || 'reactive'})` : 'Dyeing (Switched OFF)',
-        stageKey: 'dyeing',
-        carbon: dyeCarbon,
-        water: dyeWater,
-        freshWater: dyeFresh,
-        rainWater: dyeRain,
-        recycledWater: dyeRecycled,
-        gridKwh: dyeGrid,
-        gasKwh: dyeGas,
-        renewKwh: dyeRenew,
-        details: isWetProcessOn ? `${(s.dyeChems || []).length} dyes/auxiliaries, L:R ${s.dyeLiquorRatio || 8}:1` : 'Wet Processing switched OFF'
+        name: isWetProcessOn ? `Pre-treatment & Dyeing (${s.dyeMethod || 'exhaust'}, ${s.dyeClass || 'reactive'})` : 'Pre-treatment & Dyeing (Switched OFF)',
+        stageKey: 'pretreatment_dyeing',
+        carbon: preDyeCarbon,
+        water: preDyeWater,
+        freshWater: preDyeFresh,
+        rainWater: preDyeRain,
+        recycledWater: preDyeRecycled,
+        gridKwh: preDyeGrid,
+        gasKwh: preDyeGas,
+        renewKwh: preDyeRenew,
+        details: isWetProcessOn ? `${(s.preChems || []).length} prep chemicals, ${(s.dyeChems || []).length} dyes/salts, L:R ${s.dyeLiquorRatio || 8}:1` : 'Wet Processing switched OFF'
     });
 
-    // --- 6. Finishing ---
+    // --- 4. Chemical & Mechanical Finishing (Energy & Water Retained As It Is) ---
     let finCarbon = 0, finWater = 0, finFresh = 0, finRain = 0, finRecycled = 0;
     let finGrid = 0, finGas = 0, finRenew = 0;
 
@@ -234,7 +203,7 @@ function calculateProjectFootprint(customState = null) {
     }
 
     stages.push({
-        name: isWetProcessOn ? 'Finishing (Chemical & Mechanical)' : 'Finishing (Switched OFF)',
+        name: isWetProcessOn ? 'Chemical & Mechanical Finishing' : 'Finishing (Switched OFF)',
         stageKey: 'finishing',
         carbon: finCarbon,
         water: finWater,

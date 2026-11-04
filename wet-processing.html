@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wet Processing - Textile Footprint Calculator</title>
-    <link rel="stylesheet" href="css/styles.css?v=2.2">
+    <link rel="stylesheet" href="css/styles.css?v=2.3">
 </head>
 <body>
     <!-- Main Navigation Header -->
@@ -121,39 +121,7 @@
                 <h2><span>Pre-treatment (Desizing, Scouring, Bleaching, Mercerizing)</span></h2>
                 <span class="badge-tag">Preparation</span>
             </div>
-            <p class="section-desc">Chemical and thermal wet preparation of grey fabric prior to printing and dyeing.</p>
-
-            <h3>Energy Requirements</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="preGridKwh">Grid Electricity (kWh)</label>
-                    <input type="number" id="preGridKwh" value="400" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="preGasKwh">Natural Gas / Steam (kWh)</label>
-                    <input type="number" id="preGasKwh" value="2000" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="preRenewableKwh">Renewable Electricity (kWh)</label>
-                    <input type="number" id="preRenewableKwh" value="0" min="0" step="1">
-                </div>
-            </div>
-
-            <h3>Water Consumption by Source</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="preWaterFresh">Freshwater (Municipal / Borewell) (L)</label>
-                    <input type="number" id="preWaterFresh" value="50000" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="preWaterRain">Harvested Rainwater (L)</label>
-                    <input type="number" id="preWaterRain" value="0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="preWaterRecycled">Recycled Water (L)</label>
-                    <input type="number" id="preWaterRecycled" value="0" min="0" step="1">
-                </div>
-            </div>
+            <p class="section-desc">Chemical and thermal wet preparation of grey fabric prior to printing and dyeing. (Note: Electricity and water consumption for pre-treatment and dyeing are measured together once in the coloration section below).</p>
 
             <h3>Sub-processes Applied</h3>
             <div class="checkbox-group">
@@ -173,10 +141,10 @@
         <!-- STAGE: Dyeing -->
         <section class="card" id="sec-dyeing">
             <div class="card-header-styled">
-                <h2><span>Dyeing Process</span></h2>
-                <span class="badge-tag badge-blue">Coloration</span>
+                <h2><span>Dyeing Process &amp; Wet Preparation Utilities</span></h2>
+                <span class="badge-tag badge-blue">Coloration &amp; Utilities</span>
             </div>
-            <p class="section-desc">Exhaust, continuous pad, or cold pad batch coloration with dyes, electrolytes, and fixing alkalis.</p>
+            <p class="section-desc">Exhaust, continuous pad, or cold pad batch coloration with dyes, electrolytes, and fixing alkalis. Includes single unified energy and water measurement for both pre-treatment and dyeing cycles.</p>
 
             <div class="form-row">
                 <div class="form-group">
@@ -212,15 +180,17 @@
                 </div>
             </div>
 
-            <h3>Energy Requirements</h3>
+            <h3>Energy Requirements (Pre-treatment &amp; Dyeing Combined)</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label for="dyeGridKwh">Grid Electricity (kWh)</label>
                     <input type="number" id="dyeGridKwh" value="600" min="0" step="1">
+                    <small>Combined electricity for preparatory machinery and dyeing machines</small>
                 </div>
                 <div class="form-group">
-                    <label for="dyeGasKwh">Natural Gas / Steam (kWh)</label>
+                    <label for="dyeGasKwh">Natural Gas / Thermal Energy (kWh)</label>
                     <input type="number" id="dyeGasKwh" value="3000" min="0" step="1">
+                    <small>Combined process steam for desizing, scouring, bleaching, and dye bath heating</small>
                 </div>
                 <div class="form-group">
                     <label for="dyeRenewableKwh">Renewable Electricity (kWh)</label>
@@ -228,11 +198,12 @@
                 </div>
             </div>
 
-            <h3>Water Consumption by Source</h3>
+            <h3>Water Consumption by Source (Pre-treatment &amp; Dyeing Combined)</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="dyeWaterFresh">Freshwater (L)</label>
+                    <label for="dyeWaterFresh">Freshwater (Municipal / Borewell) (L)</label>
                     <input type="number" id="dyeWaterFresh" value="80000" min="0" step="1">
+                    <small>Combined freshwater for preparation baths, coloration, and after-washing</small>
                 </div>
                 <div class="form-group">
                     <label for="dyeWaterRain">Harvested Rainwater (L)</label>
@@ -394,19 +365,19 @@
 
             updateProjectState({
                 includeWetProcessing: isWetOn,
-                // Pretreatment
-                preGridKwh: parseFloat(document.getElementById('preGridKwh').value) || 0,
-                preGasKwh: parseFloat(document.getElementById('preGasKwh').value) || 0,
-                preRenewableKwh: parseFloat(document.getElementById('preRenewableKwh').value) || 0,
-                preWaterFresh: parseFloat(document.getElementById('preWaterFresh').value) || 0,
-                preWaterRain: parseFloat(document.getElementById('preWaterRain').value) || 0,
-                preWaterRecycled: parseFloat(document.getElementById('preWaterRecycled').value) || 0,
+                // Pretreatment (Utilities unified with Dyeing; not counted twice)
+                preGridKwh: 0,
+                preGasKwh: 0,
+                preRenewableKwh: 0,
+                preWaterFresh: 0,
+                preWaterRain: 0,
+                preWaterRecycled: 0,
                 chkDesizing: document.getElementById('chkDesizing').checked,
                 chkScouring: document.getElementById('chkScouring').checked,
                 chkBleaching: document.getElementById('chkBleaching').checked,
                 chkMercerizing: document.getElementById('chkMercerizing').checked,
 
-                // Dyeing
+                // Dyeing & Wet Preparation Utilities (Single combined energy & water for Pre-treatment + Dyeing)
                 dyeMethod: document.getElementById('dyeMethod').value,
                 dyeClass: document.getElementById('dyeClass').value,
                 dyeLiquorRatio: parseFloat(document.getElementById('dyeLiquorRatio').value) || 8,
@@ -442,19 +413,13 @@
             const isWetOn = state.includeWetProcessing !== false;
             updateSegmentUI(isWetOn);
 
-            // Pretreatment
-            document.getElementById('preGridKwh').value = state.preGridKwh !== undefined ? state.preGridKwh : 400;
-            document.getElementById('preGasKwh').value = state.preGasKwh !== undefined ? state.preGasKwh : 2000;
-            document.getElementById('preRenewableKwh').value = state.preRenewableKwh !== undefined ? state.preRenewableKwh : 0;
-            document.getElementById('preWaterFresh').value = state.preWaterFresh !== undefined ? state.preWaterFresh : 50000;
-            document.getElementById('preWaterRain').value = state.preWaterRain !== undefined ? state.preWaterRain : 0;
-            document.getElementById('preWaterRecycled').value = state.preWaterRecycled !== undefined ? state.preWaterRecycled : 0;
+            // Pretreatment Sub-processes Applied
             document.getElementById('chkDesizing').checked = !!state.chkDesizing;
             document.getElementById('chkScouring').checked = !!state.chkScouring;
             document.getElementById('chkBleaching').checked = !!state.chkBleaching;
             document.getElementById('chkMercerizing').checked = !!state.chkMercerizing;
 
-            // Dyeing
+            // Dyeing & Combined Wet Prep Utilities (Single combined energy & water for Pre-treatment + Dyeing)
             document.getElementById('dyeMethod').value = state.dyeMethod || 'exhaust';
             document.getElementById('dyeClass').value = state.dyeClass || 'reactive';
             document.getElementById('dyeLiquorRatio').value = state.dyeLiquorRatio || 8;

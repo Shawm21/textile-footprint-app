@@ -75,11 +75,11 @@ function getDefaultState() {
             { id: 'wchem_1', key: 'starch', customName: '', qty: 50, ef: 1.20 }
         ],
 
-        // 5. Pre-treatment
-        preGridKwh: 400,
-        preGasKwh: 2000,
+        // 5. Pre-treatment (Utilities unified with Dyeing; not counted twice)
+        preGridKwh: 0,
+        preGasKwh: 0,
         preRenewableKwh: 0,
-        preWaterFresh: 50000,
+        preWaterFresh: 0,
         preWaterRain: 0,
         preWaterRecycled: 0,
         preChems: [
@@ -91,7 +91,7 @@ function getDefaultState() {
         chkBleaching: true,
         chkMercerizing: false,
 
-        // 6. Dyeing
+        // 6. Dyeing & Wet Preparation Utilities (Single combined energy & water for Pre-treatment + Dyeing)
         dyeMethod: 'exhaust',
         dyeClass: 'reactive',
         dyeGridKwh: 600,
