@@ -93,11 +93,4 @@ The calculator features modular, independently toggleable process segments:
 
 - Hybrid Client-Cloud Persistence: Combines high-speed browser localStorage with cloud-synchronized REST key-value storage (kvdb.io) to ensure multi-terminal access across mill offices without account isolation.
 - Central Administrative Console: Dedicated administrative auditing dashboard providing factory-wide batch tracking, cumulative carbon and water accounting, order inspection, and multi-user registry management.
-- Dynamic Reporting Engine: Generates formal Lifecycle Assessment (LCA) Technical Methodology Reports in Microsoft Word (.docx) format formatted in Times New Roman with strict black-and-white academic typography and stage-by-stage decrypted mathematical equations.
-
----
-
-## 4. Formal Methodology Reference Report
-
-A comprehensive 6-section methodology whitepaper with complete mathematical proofs, mass-balance formulations, and emission factor tables is included in this repository:
-- Word Document: Textile_LCA_Methodology_Report.docx
+- Dynamic Reporting Engine: Generates real-time interactive lifecycle audit reports, detailed stage-by-stage decrypted mathematical breakdowns, interactive Sankey flows, and exportable CSV dataset logs.

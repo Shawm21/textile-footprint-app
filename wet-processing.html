@@ -161,7 +161,6 @@
                 <label class="checkbox-label"><input type="checkbox" id="chkScouring" checked> Scouring</label>
                 <label class="checkbox-label"><input type="checkbox" id="chkBleaching" checked> Bleaching</label>
                 <label class="checkbox-label"><input type="checkbox" id="chkMercerizing"> Mercerizing (Cotton)</label>
-                <label class="checkbox-label"><input type="checkbox" id="chkHeatSetting"> Heat Setting (Polyester/Blend)</label>
             </div>
 
             <h3>Pre-treatment Chemicals</h3>
@@ -279,7 +278,7 @@
             <!-- MECHANICAL FINISHING SUB-PROCESSES: PLACED DIRECTLY AFTER ELECTRICITY -->
             <h3>Mechanical Finishing Sub-processes</h3>
             <div class="checkbox-group">
-                <label class="checkbox-label"><input type="checkbox" id="chkStentering" checked> Stentering / Heat Setting</label>
+                <label class="checkbox-label"><input type="checkbox" id="chkStentering" checked> Stentering</label>
                 <label class="checkbox-label"><input type="checkbox" id="chkCalendering"> Calendering</label>
                 <label class="checkbox-label"><input type="checkbox" id="chkSanforizing"> Sanforizing / Compacting</label>
                 <label class="checkbox-label"><input type="checkbox" id="chkBrushing"> Raising / Brushing</label>
@@ -406,7 +405,6 @@
                 chkScouring: document.getElementById('chkScouring').checked,
                 chkBleaching: document.getElementById('chkBleaching').checked,
                 chkMercerizing: document.getElementById('chkMercerizing').checked,
-                chkHeatSetting: document.getElementById('chkHeatSetting').checked,
 
                 // Dyeing
                 dyeMethod: document.getElementById('dyeMethod').value,
@@ -455,7 +453,6 @@
             document.getElementById('chkScouring').checked = !!state.chkScouring;
             document.getElementById('chkBleaching').checked = !!state.chkBleaching;
             document.getElementById('chkMercerizing').checked = !!state.chkMercerizing;
-            document.getElementById('chkHeatSetting').checked = !!state.chkHeatSetting;
 
             // Dyeing
             document.getElementById('dyeMethod').value = state.dyeMethod || 'exhaust';

@@ -90,7 +90,6 @@ function getDefaultState() {
         chkScouring: true,
         chkBleaching: true,
         chkMercerizing: false,
-        chkHeatSetting: false,
 
         // 6. Dyeing
         dyeMethod: 'exhaust',
