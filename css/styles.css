@@ -1046,7 +1046,7 @@ main {
 }
 
 .toast-success {
-    background: #0891b2;
+    background: #16a34a;
 }
 
 .toast-warning {
@@ -1153,9 +1153,9 @@ main {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 0.4rem;
-    background: #cffafe;
-    color: #0891b2;
-    border: 1px solid #a5f3fc;
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
 }
 
 .segment-status-badge.off {
@@ -1178,13 +1178,13 @@ main {
 }
 
 /* ==========================================================================
-   INTERACTIVE SLIDING BUTTON STAGE SWITCH (NO CHECKBOX)
+   INTERACTIVE SLIDING BUTTON STAGE SWITCH (SKEUOMORPHIC PILL SWITCH)
    ========================================================================== */
 .sliding-button-container {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0;
     flex-shrink: 0;
 }
 
@@ -1201,135 +1201,144 @@ main {
 }
 
 .sliding-button:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
 }
 
 .sliding-button:active {
-    transform: scale(0.97);
+    transform: scale(0.98);
 }
 
 .sliding-button:focus-visible {
-    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.4);
-    border-radius: 42px;
+    border-radius: 9999px;
+    outline: none;
+}
+
+.sliding-button:focus-visible .sliding-track {
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.45);
 }
 
 .sliding-track {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 104px;
-    height: 42px;
-    padding: 3px;
-    border-radius: 42px;
-    background: #cbd5e1;
-    border: 2px solid #94a3b8;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(255, 255, 255, 0.8);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    width: 96px;
+    height: 48px;
+    border-radius: 9999px;
+    background: #eaedf0;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 -1px 2px rgba(255, 255, 255, 0.7);
+    transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s ease;
     box-sizing: border-box;
+    overflow: visible;
 }
 
 .sliding-track-label {
-    flex: 1;
-    text-align: center;
-    font-size: 0.84rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    z-index: 2;
-    transition: color 0.3s ease;
+    position: absolute;
+    top: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     user-select: none;
     pointer-events: none;
     line-height: 1;
+    z-index: 2;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.sliding-track-label.on-label {
+    left: 0;
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: #009938;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.38), 0 -1px 1px rgba(0, 0, 0, 0.24);
+    opacity: 0;
+    transform: scale(0.85);
+}
+
+.sliding-track-label.off-label {
+    right: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #b0b6bf;
+    text-shadow: 0 1px 1px #ffffff, 0 -1px 1px rgba(0, 0, 0, 0.18);
+    opacity: 1;
+    transform: scale(1);
 }
 
 .sliding-thumb {
     position: absolute;
-    top: 3px;
-    bottom: 3px;
-    left: 3px;
-    width: 48px;
-    border-radius: 36px;
-    background: #ffffff;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.14);
-    z-index: 1;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, box-shadow 0.3s ease;
+    top: 4px;
+    left: 4px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 45% 38%, #ffffff 0%, #fbfbfc 65%, #f1f3f6 100%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.12);
+    z-index: 3;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s ease;
 }
 
 /* ACTIVE (ON) STATE */
 .sliding-button.active .sliding-track {
-    background: #0891b2;
-    border-color: #0e7490;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+    background-color: #00c853;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.16), inset 0 -1px 2px rgba(255, 255, 255, 0.2);
 }
 
 .sliding-button.active .sliding-thumb {
-    transform: translateX(0);
-    background: #ffffff;
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(8, 145, 178, 0.25);
+    transform: translateX(48px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .sliding-button.active .sliding-track-label.on-label {
-    color: #0891b2;
-    font-weight: 900;
+    opacity: 1;
+    transform: scale(1);
 }
 
 .sliding-button.active .sliding-track-label.off-label {
-    color: rgba(255, 255, 255, 0.78);
+    opacity: 0;
+    transform: scale(0.85);
 }
 
 /* INACTIVE (OFF) STATE */
 .sliding-button:not(.active) .sliding-track {
-    background: #94a3b8;
-    border-color: #64748b;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #eaedf0;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.12), inset 0 -1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .sliding-button:not(.active) .sliding-thumb {
-    transform: translateX(46px);
-    background: #ffffff;
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.32);
+    transform: translateX(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .sliding-button:not(.active) .sliding-track-label.on-label {
-    color: rgba(255, 255, 255, 0.65);
+    opacity: 0;
+    transform: scale(0.85);
 }
 
 .sliding-button:not(.active) .sliding-track-label.off-label {
-    color: #334155;
-    font-weight: 900;
+    opacity: 1;
+    transform: scale(1);
 }
 
+/* Hide external text label below switch to match pure button design */
 .sliding-button-text {
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: #0891b2;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.sliding-button-text.off {
-    color: #64748b;
+    display: none;
 }
 
 /* Legacy fallback classes */
 .switch-toggle-wrap {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0;
     flex-shrink: 0;
 }
 
 .switch-toggle-wrap .switch-state-text {
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: #0891b2;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.switch-toggle-wrap .switch-state-text.off {
-    color: #64748b;
+    display: none;
 }
 
 .segment-disabled-notice {
