@@ -239,7 +239,36 @@
             <div class="chart-container" id="waterChart"></div>
         </section>
 
-        <!-- 4. UTILITIES & WATER SOURCE BALANCES -->
+        <!-- 4. PRODUCTION STAGE ENERGY BASELINE & ALLOCATION SUMMARY -->
+        <section class="card" style="border-left: 4px solid #0284c7; background: #f0f9ff; margin-bottom: 1.5rem;">
+            <div class="card-header-styled">
+                <h2><span>Production Stage Energy Baseline &amp; Allocation Model</span></h2>
+                <span class="badge-tag badge-blue">Allocation Basis</span>
+            </div>
+            <p class="section-desc" style="color: #0369a1; margin-bottom: 1rem;">
+                Process stage electricity emissions are allocated proportionally from the factory baseline:
+                <strong>Per stage EF = Total EF &times; (Per stage electricity / Total electricity)</strong>.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem;">
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Total Factory Electricity</div>
+                    <div id="resTotalProdElectricity" style="font-size: 1.35rem; font-weight: 800; color: #0284c7; margin: 0.2rem 0;">0 kWh</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">National Grid + Natural Gas + Other Fuel + Renewable</small>
+                </div>
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Total Factory EF (Total Emissions)</div>
+                    <div id="resTotalProdEF" style="font-size: 1.35rem; font-weight: 800; color: #059669; margin: 0.2rem 0;">0.0 kg CO₂e</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">(Grid&times;EF) + (Gas&times;EF) + (Other&times;EF) + (Renew&times;EF)</small>
+                </div>
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Allocated Stage Electricity EF</div>
+                    <div id="resAllocatedEF" style="font-size: 1.35rem; font-weight: 800; color: #0f766e; margin: 0.2rem 0;">0.000 kg CO₂e/kWh</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">Total EF / Total Electricity</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. UTILITIES & WATER SOURCE BALANCES -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.2rem;">
             <section class="card">
                 <div class="card-header-styled">
@@ -250,6 +279,7 @@
                         <tr>
                             <th>Source</th>
                             <th>Consumption (kWh)</th>
+                            <th>EF (kg CO₂e/kWh)</th>
                             <th>Emissions (kg CO₂e)</th>
                         </tr>
                     </thead>
@@ -362,6 +392,17 @@
             document.getElementById('tfoot-carbon').innerHTML = `<strong>${formatNum(r.totalCarbon, 1)}</strong>`;
             document.getElementById('tfoot-water').innerHTML = `<strong>${formatNum(r.totalWater, 0)}</strong>`;
 
+            // Production Baseline Allocation Card
+            if (document.getElementById('resTotalProdElectricity')) {
+                document.getElementById('resTotalProdElectricity').textContent = `${formatNum(r.totalProdElectricity || 0, 0)} kWh`;
+            }
+            if (document.getElementById('resTotalProdEF')) {
+                document.getElementById('resTotalProdEF').textContent = `${formatNum(r.totalProdEF || 0, 1)} kg CO₂e`;
+            }
+            if (document.getElementById('resAllocatedEF')) {
+                document.getElementById('resAllocatedEF').textContent = `${(r.stageAllocatedEF !== undefined ? r.stageAllocatedEF : 0).toFixed(3)} kg CO₂e/kWh`;
+            }
+
             // 2. Energy Breakdown
             const energyBody = document.getElementById('energyBreakdownBody');
             energyBody.innerHTML = '';
@@ -370,9 +411,11 @@
                 totalKwh += e.kwh;
                 totalEnergyC += e.carbon;
                 const tr = document.createElement('tr');
+                const efDisplay = (e.ef !== undefined && e.ef !== null) ? Number(e.ef).toFixed(3) : '-';
                 tr.innerHTML = `
                     <td>${e.name}</td>
                     <td>${formatNum(e.kwh, 0)}</td>
+                    <td><span class="badge-tag">${efDisplay}</span></td>
                     <td>${formatNum(e.carbon, 1)}</td>
                 `;
                 energyBody.appendChild(tr);
@@ -382,6 +425,7 @@
             trEnergyTotal.innerHTML = `
                 <td><strong>Total Energy</strong></td>
                 <td><strong>${formatNum(totalKwh, 0)}</strong></td>
+                <td>-</td>
                 <td><strong>${formatNum(totalEnergyC, 1)}</strong></td>
             `;
             energyBody.appendChild(trEnergyTotal);

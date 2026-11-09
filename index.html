@@ -166,9 +166,17 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="renewableEF">Renewable Electricity EF (kg CO₂e/kWh)</label>
-                    <input type="number" id="renewableEF" value="0.0" min="0" step="0.001">
+                    <input type="number" id="renewableEF" value="0.0" min="0" step="0.001" oninput="calculateProductionEnergyTotals()">
                     <small>0.0 for direct zero-carbon renewable energy generation</small>
                 </div>
+                <div class="form-group">
+                    <label for="otherFuelKwh">Other Fuel Energy (Diesel / Biomass / Coal) (kWh)</label>
+                    <input type="number" id="otherFuelKwh" value="0" min="0" step="1" oninput="calculateProductionEnergyTotals()">
+                    <small>Factory generators, backup fuels, or solid fuel combustion</small>
+                </div>
+            </div>
+
+            <div class="form-row">
                 <div class="form-group">
                     <label for="otherFuelEF">Other Fuel EF (kg CO₂e/kWh)</label>
                     <input type="number" id="otherFuelEF" value="0.32" min="0" step="0.001" oninput="handleOtherFuelEFChange()">
@@ -199,7 +207,7 @@
                 </div>
                 <div class="form-group">
                     <label for="boilerEF">Boiler Thermal Emission Factor (kg CO₂e/kWh)</label>
-                    <input type="number" id="boilerEF" value="0.184" min="0" step="0.001">
+                    <input type="number" id="boilerEF" value="0.184" min="0" step="0.001" oninput="calculateProductionEnergyTotals()">
                     <small id="boilerEFHint">Natural gas standard factor: 0.184 kg CO₂e/kWh</small>
                 </div>
             </div>
@@ -212,8 +220,38 @@
                 </div>
                 <div class="form-group">
                     <label for="natGasKwh">Boiler Reference Fuel / Energy Intake (kWh) [Reference Only]</label>
-                    <input type="number" id="natGasKwh" value="8000" min="0" step="1">
+                    <input type="number" id="natGasKwh" value="8000" min="0" step="1" oninput="calculateProductionEnergyTotals()">
                     <small>Boiler fuel intake reference (Displayed for reference, stage steam computed per process)</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Production Stage Energy & Emission Allocation Summary -->
+        <section class="card" style="border-left: 4px solid #0284c7; background: #f0f9ff;">
+            <div class="card-header-styled">
+                <h2><span>Production Stage Energy &amp; Emission Allocation Summary</span></h2>
+                <span class="badge-tag badge-blue">Allocation Basis</span>
+            </div>
+            <p class="section-desc">
+                Energy baseline and total emissions used to calculate the electricity carbon footprint across all subsequent stages:
+                <strong>Per stage EF = Total EF × (Per stage electricity / Total electricity)</strong>.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Total Electricity / Energy</div>
+                    <div id="dispTotalProdElectricity" style="font-size: 1.35rem; font-weight: 800; color: #0284c7; margin: 0.2rem 0;">14,000 kWh</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">National Grid + Natural Gas + Other Fuel + Renewable</small>
+                </div>
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Total Emission Factor (Emissions)</div>
+                    <div id="dispTotalProdEF" style="font-size: 1.35rem; font-weight: 800; color: #059669; margin: 0.2rem 0;">5,722.0 kg CO₂e</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">(Grid×EF) + (Gas×EF) + (Other×EF) + (Renew×EF)</small>
+                </div>
+                <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid #bae6fd;">
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; text-transform: uppercase;">Allocated Emission Factor</div>
+                    <div id="dispEffectiveUnitEF" style="font-size: 1.35rem; font-weight: 800; color: #0f766e; margin: 0.2rem 0;">0.409 kg CO₂e/kWh</div>
+                    <small style="color: #64748b; font-size: 0.78rem;">Total EF / Total Electricity</small>
                 </div>
             </div>
         </section>
@@ -282,11 +320,39 @@
             saveCurrentInputs();
         }
 
+        function calculateProductionEnergyTotals() {
+            const gridKwh = parseFloat(document.getElementById('gridElectricity').value) || 0;
+            const gridEF = parseFloat(document.getElementById('gridEF').value) || 0;
+            const gasKwh = parseFloat(document.getElementById('natGasKwh').value) || 0;
+            const gasEF = parseFloat(document.getElementById('boilerEF').value) || 0;
+            const otherKwh = parseFloat(document.getElementById('otherFuelKwh').value) || 0;
+            const otherEF = parseFloat(document.getElementById('otherFuelEF').value) || 0;
+            const renewKwh = parseFloat(document.getElementById('renewableKwh').value) || 0;
+            const renewEF = parseFloat(document.getElementById('renewableEF').value) || 0;
+
+            // Total electricity = national grid + natural gas + other fuel + renewable energy
+            const totalElec = gridKwh + gasKwh + otherKwh + renewKwh;
+
+            // Total emission factor (total emissions in kg CO2e) =
+            // (national grid electricity * EF) + (natural gas electricity * EF) + (other fuel * EF) + (renewable energy * EF)
+            const totalEF = (gridKwh * gridEF) + (gasKwh * gasEF) + (otherKwh * otherEF) + (renewKwh * renewEF);
+            const unitEF = totalElec > 0 ? (totalEF / totalElec) : gridEF;
+
+            const elTotalElec = document.getElementById('dispTotalProdElectricity');
+            const elTotalEF = document.getElementById('dispTotalProdEF');
+            const elUnitEF = document.getElementById('dispEffectiveUnitEF');
+
+            if (elTotalElec) elTotalElec.textContent = `${totalElec.toLocaleString('en-US', { maximumFractionDigits: 0 })} kWh`;
+            if (elTotalEF) elTotalEF.textContent = `${totalEF.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg CO₂e`;
+            if (elUnitEF) elUnitEF.textContent = `${unitEF.toFixed(3)} kg CO₂e/kWh`;
+        }
+
         function handleGridEFChange() {
             const fuel = document.getElementById('boilerFuelType').value;
             if (fuel === 'electricity') {
                 document.getElementById('boilerEF').value = document.getElementById('gridEF').value;
             }
+            calculateProductionEnergyTotals();
             saveCurrentInputs();
         }
 
@@ -295,6 +361,7 @@
             if (fuel === 'other_fuel') {
                 document.getElementById('boilerEF').value = document.getElementById('otherFuelEF').value;
             }
+            calculateProductionEnergyTotals();
             saveCurrentInputs();
         }
 
@@ -310,11 +377,13 @@
                 natGasKwh: parseFloat(document.getElementById('natGasKwh').value) || 0,
                 renewableKwh: parseFloat(document.getElementById('renewableKwh').value) || 0,
                 renewableEF: parseFloat(document.getElementById('renewableEF').value) || 0,
+                otherFuelKwh: parseFloat(document.getElementById('otherFuelKwh').value) || 0,
                 otherFuelEF: parseFloat(document.getElementById('otherFuelEF').value) || 0,
                 boilerFuelType: document.getElementById('boilerFuelType').value,
                 boilerEF: parseFloat(document.getElementById('boilerEF').value) || 0.184,
                 boilerEfficiency: parseFloat(document.getElementById('boilerEfficiency').value) || 85
             });
+            calculateProductionEnergyTotals();
         }
 
         function populateForm() {
@@ -329,6 +398,7 @@
             document.getElementById('facilityWaterL').value = state.facilityWaterL !== undefined ? state.facilityWaterL : 150000;
             document.getElementById('renewableKwh').value = state.renewableKwh !== undefined ? state.renewableKwh : 1000;
             document.getElementById('renewableEF').value = state.renewableEF !== undefined ? state.renewableEF : 0.0;
+            document.getElementById('otherFuelKwh').value = state.otherFuelKwh !== undefined ? state.otherFuelKwh : 0;
             document.getElementById('otherFuelEF').value = state.otherFuelEF !== undefined ? state.otherFuelEF : 0.32;
 
             document.getElementById('boilerFuelType').value = state.boilerFuelType || 'natural_gas';
@@ -347,6 +417,8 @@
             } else {
                 hint.textContent = 'Natural gas standard factor: 0.184 kg CO₂e/kWh';
             }
+
+            calculateProductionEnergyTotals();
         }
 
         function resetFormToDefaults() {

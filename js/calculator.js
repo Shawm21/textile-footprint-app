@@ -12,10 +12,10 @@ function calculateProjectFootprint(customState = null) {
     const s = customState || getProjectState();
     const prodWeight = parseFloat(s.productionWeight) || 1;
 
-    // Energy EFs
-    const gridEF = parseFloat(s.gridEF) || 0;
-    const renewEF = parseFloat(s.renewableEF) || 0;
-    const otherFuelEF = parseFloat(s.otherFuelEF) || 0;
+    // ============ PRODUCTION STAGE FACILITY BASELINE & ALLOCATION ============
+    // Baseline electricity and fuel from Production Stage
+    const gridElectricity = parseFloat(s.gridElectricity) || 0;
+    const gridEF = parseFloat(s.gridEF) !== undefined ? parseFloat(s.gridEF) : 0.85;
 
     // Central Boiler & Process Steam Configuration
     // The boiler can operate on Natural Gas, Grid Electricity, or Other Fuel
@@ -26,13 +26,44 @@ function calculateProjectFootprint(customState = null) {
     } else if (boilerFuelType === 'electricity') {
         boilerEF = gridEF;
     } else if (boilerFuelType === 'other_fuel') {
-        boilerEF = otherFuelEF || 0.32;
+        boilerEF = parseFloat(s.otherFuelEF) || 0.32;
     } else {
         boilerEF = parseFloat(s.natGasEF) || 0.184;
     }
 
     // Thermal & Process Steam emission factor applied to all manufacturing stages
     const gasEF = boilerEF;
+    const natGasKwh = parseFloat(s.natGasKwh) || 0;
+
+    const otherFuelKwh = parseFloat(s.otherFuelKwh) || 0;
+    const otherFuelEF = parseFloat(s.otherFuelEF) !== undefined ? parseFloat(s.otherFuelEF) : 0.32;
+
+    const renewableKwh = parseFloat(s.renewableKwh) || 0;
+    const renewEF = parseFloat(s.renewableEF) !== undefined ? parseFloat(s.renewableEF) : 0.0;
+
+    // Production Stage Formula from user handwritten notes:
+    // Total electricity = national grid + natural gas + other fuel + renewable energy
+    const totalProdElectricity = gridElectricity + natGasKwh + otherFuelKwh + renewableKwh;
+
+    // Total emission factor (total emissions in kg CO2e) =
+    // (national grid electricity * EF) + (natural gas electricity * EF) + (other fuel * EF) + (renewable energy * EF)
+    const totalProdEF = (gridElectricity * gridEF) + 
+                        (natGasKwh * gasEF) + 
+                        (otherFuelKwh * otherFuelEF) + 
+                        (renewableKwh * renewEF);
+
+    // Per stage electricity emission formula:
+    // Per stage EF = Total EF * (Per stage electricity / Total electricity)
+    function calcStageElectricityCarbon(stageKwh) {
+        const kwh = parseFloat(stageKwh) || 0;
+        if (kwh <= 0) return 0;
+        if (totalProdElectricity > 0) {
+            return totalProdEF * (kwh / totalProdElectricity);
+        }
+        return kwh * gridEF;
+    }
+
+    const stageAllocatedEF = totalProdElectricity > 0 ? (totalProdEF / totalProdElectricity) : gridEF;
 
     const stages = [];
 
@@ -47,7 +78,7 @@ function calculateProjectFootprint(customState = null) {
         spinGrid = parseFloat(s.spinGridKwh) || 0;
         spinGas = parseFloat(s.spinGasKwh) || 0;
         spinRenew = parseFloat(s.spinRenewableKwh) || 0;
-        spinCarbon = (spinGrid * gridEF) + (spinGas * gasEF) + (spinRenew * renewEF);
+        spinCarbon = calcStageElectricityCarbon(spinGrid) + (spinGas * gasEF) + (spinRenew * renewEF);
         spinWater = parseFloat(s.spinWater) || 0;
     }
 
@@ -62,7 +93,7 @@ function calculateProjectFootprint(customState = null) {
         gridKwh: spinGrid,
         gasKwh: spinGas,
         renewKwh: spinRenew,
-        details: isSpinningOn ? `${spinGrid} kWh Grid, ${spinGas} kWh Gas, ${s.spinWastePercent || 5}% waste loss` : 'Switched OFF (Excluded)'
+        details: isSpinningOn ? `${spinGrid} kWh Grid (Allocated EF: ${stageAllocatedEF.toFixed(3)}), ${spinGas} kWh Gas` : 'Switched OFF (Excluded)'
     });
 
     // --- 1b. Yarn Dyeing (Optional Stage below Spinning) ---
@@ -82,7 +113,7 @@ function calculateProjectFootprint(customState = null) {
             yarnDyeChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        yarnDyeCarbon = (yarnDyeGrid * gridEF) + (yarnDyeGas * gasEF) + (yarnDyeRenew * renewEF) + yarnDyeChemCarbon;
+        yarnDyeCarbon = calcStageElectricityCarbon(yarnDyeGrid) + (yarnDyeGas * gasEF) + (yarnDyeRenew * renewEF) + yarnDyeChemCarbon;
     }
 
     stages.push({
@@ -122,7 +153,7 @@ function calculateProjectFootprint(customState = null) {
             weaveChemSummary = 'Knitting (No sizing chemicals used)';
         }
 
-        weaveCarbon = (weaveGrid * gridEF) + (weaveGas * gasEF) + (weaveRenew * renewEF) + weaveChemCarbon;
+        weaveCarbon = calcStageElectricityCarbon(weaveGrid) + (weaveGas * gasEF) + (weaveRenew * renewEF) + weaveChemCarbon;
     }
 
     stages.push({
@@ -160,7 +191,7 @@ function calculateProjectFootprint(customState = null) {
             dyeChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        preDyeCarbon = (preDyeGrid * gridEF) + (preDyeGas * gasEF) + (preDyeRenew * renewEF) + preChemCarbon + dyeChemCarbon;
+        preDyeCarbon = calcStageElectricityCarbon(preDyeGrid) + (preDyeGas * gasEF) + (preDyeRenew * renewEF) + preChemCarbon + dyeChemCarbon;
         preDyeFresh = parseFloat(s.dyeWaterFresh) || 0;
         preDyeRain = parseFloat(s.dyeWaterRain) || 0;
         preDyeRecycled = parseFloat(s.dyeWaterRecycled) || 0;
@@ -195,7 +226,7 @@ function calculateProjectFootprint(customState = null) {
             finChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        finCarbon = (finGrid * gridEF) + (finGas * gasEF) + (finRenew * renewEF) + finChemCarbon;
+        finCarbon = calcStageElectricityCarbon(finGrid) + (finGas * gasEF) + (finRenew * renewEF) + finChemCarbon;
         finFresh = parseFloat(s.finWaterFresh) || 0;
         finRain = parseFloat(s.finWaterRain) || 0;
         finRecycled = parseFloat(s.finWaterRecycled) || 0;
@@ -231,7 +262,7 @@ function calculateProjectFootprint(customState = null) {
             printChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        printCarbon = (printGrid * gridEF) + (printGas * gasEF) + (printRenew * renewEF) + printChemCarbon;
+        printCarbon = calcStageElectricityCarbon(printGrid) + (printGas * gasEF) + (printRenew * renewEF) + printChemCarbon;
         printFresh = parseFloat(s.printWaterFresh) || 0;
         printRecycled = parseFloat(s.printWaterRecycled) || 0;
         printWater = printFresh + printRecycled;
@@ -271,7 +302,7 @@ function calculateProjectFootprint(customState = null) {
             washChemCarbon += (parseFloat(c.qty) || 0) * (parseFloat(c.ef) || 0);
         });
 
-        garmentCarbon = (garmentGrid * gridEF) + (garmentGas * gasEF) + (garmentRenew * renewEF) + washChemCarbon;
+        garmentCarbon = calcStageElectricityCarbon(garmentGrid) + (garmentGas * gasEF) + (garmentRenew * renewEF) + washChemCarbon;
         garmentFresh = parseFloat(s.garmentWashWaterFresh) || 0;
         garmentRecycled = parseFloat(s.garmentWashWaterRecycled) || 0;
         garmentWater = garmentFresh + garmentRecycled;
@@ -308,7 +339,7 @@ function calculateProjectFootprint(customState = null) {
         const sludgeEF = parseFloat(s.etpSludgeEF) || 0;
         etpSludgeC = sludgeKg * sludgeEF;
 
-        etpCarbon = (etpGrid * gridEF) + (etpGas * gasEF) + etpChemC + etpSludgeC;
+        etpCarbon = calcStageElectricityCarbon(etpGrid) + (etpGas * gasEF) + etpChemC + etpSludgeC;
     }
 
     stages.push({
@@ -324,12 +355,6 @@ function calculateProjectFootprint(customState = null) {
         renewKwh: 0,
         details: isEtpOn ? `${(s.etpChems || []).length} coagulants/flocculants, sludge disposal` : 'Switched OFF (Excluded)'
     });
-
-    // NOTE: Factory general energy and water on the first page are reference benchmarks
-    // and are NOT double-counted into totalCarbon or totalWater to prevent duplication.
-    // Process-specific energy and water are accumulated from individual stages below.
-
-    // NOTE: TRANSPORTATION REMOVED PER REQUIREMENT 4!
 
     // --- 10. Packaging Materials & Operations ---
     const isPackOn = s.includePackaging !== false;
@@ -354,7 +379,7 @@ function calculateProjectFootprint(customState = null) {
                      (packCardboardKg * packCardboardEF) + 
                      (packPaperTagsKg * packPaperTagsEF) + 
                      (packHangersKg * packHangersEF) + 
-                     (packGrid * gridEF) + 
+                     calcStageElectricityCarbon(packGrid) + 
                      (packGas * gasEF);
     }
 
@@ -404,7 +429,7 @@ function calculateProjectFootprint(customState = null) {
     else if (boilerFuelType === 'other_fuel') boilerLabel = 'Other Fuel Boiler (Biomass/Diesel/Coal)';
 
     const energySources = [
-        { name: 'National Grid Electricity (Process Stages)', kwh: totalGridKwh, carbon: totalGridKwh * gridEF, ef: gridEF },
+        { name: 'National Grid Electricity (Allocated Pro-Rata)', kwh: totalGridKwh, carbon: calcStageElectricityCarbon(totalGridKwh), ef: stageAllocatedEF },
         { name: `Process Steam / Thermal Energy (${boilerLabel})`, kwh: totalGasKwh, carbon: totalGasKwh * gasEF, ef: gasEF },
         { name: 'On-site Renewable Electricity (Clean Generation)', kwh: effectiveRenewKwh, carbon: effectiveRenewKwh * renewEF, ef: renewEF },
         { name: 'Other Fuel (Generators & Auxiliaries)', kwh: totalOtherKwh, carbon: totalOtherKwh * otherFuelEF, ef: otherFuelEF }
@@ -439,6 +464,9 @@ function calculateProjectFootprint(customState = null) {
         stages: stages,
         energySources: energySources,
         waterSources: waterSources,
+        totalProdElectricity: totalProdElectricity,
+        totalProdEF: totalProdEF,
+        stageAllocatedEF: stageAllocatedEF,
         gridEF: gridEF,
         gasEF: gasEF,
         renewEF: renewEF,

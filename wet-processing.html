@@ -115,112 +115,134 @@
 
         <!-- SEGMENT CONTENT CONTAINER -->
         <div id="segmentContentWetProcessing">
-            <!-- STAGE: Pre-treatment -->
+            <!-- SECTION 1: Wet Processing Utilities (Pre-treatment & Dyeing) - AT THE START -->
+            <section class="card" id="sec-wet-utilities" style="border-left: 4px solid #0891b2;">
+                <div class="card-header-styled">
+                    <h2><span>Wet Processing Energy &amp; Water Consumption (Pre-treatment &amp; Dyeing)</span></h2>
+                    <span class="badge-tag badge-blue">Utilities Baseline</span>
+                </div>
+                <p class="section-desc">Unified electricity, thermal energy, and water consumption for all grey fabric preparation (desizing, scouring, bleaching, mercerizing) and coloration operations.</p>
+
+                <h3>Electricity &amp; Energy Requirements</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dyeGridKwh">Grid Electricity (kWh)</label>
+                        <input type="number" id="dyeGridKwh" value="600" min="0" step="1">
+                        <small>Combined electricity for preparation machines and dyeing vessels. Allocated via Production Total EF.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeGasKwh">Natural Gas / Thermal Energy (kWh)</label>
+                        <input type="number" id="dyeGasKwh" value="3000" min="0" step="1">
+                        <small>Combined process steam for desizing, scouring, bleaching, and dye bath heating</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeRenewableKwh">Renewable Electricity (kWh)</label>
+                        <input type="number" id="dyeRenewableKwh" value="0" min="0" step="1">
+                    </div>
+                </div>
+
+                <h3>Water Consumption by Source</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dyeWaterFresh">Freshwater (Municipal / Borewell) (L)</label>
+                        <input type="number" id="dyeWaterFresh" value="80000" min="0" step="1">
+                        <small>Combined freshwater for preparation baths, coloration, and after-washing</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeWaterRain">Harvested Rainwater (L)</label>
+                        <input type="number" id="dyeWaterRain" value="0" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeWaterRecycled">Recycled Water (L)</label>
+                        <input type="number" id="dyeWaterRecycled" value="0" min="0" step="1">
+                    </div>
+                </div>
+
+                <!-- Stage Electricity Allocation Formula Banner -->
+                <div class="calc-box-item" style="margin-top: 1.2rem; background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 0.9rem 1.1rem;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #15803d; text-transform: uppercase; margin-bottom: 0.25rem;">
+                        Electricity Carbon Allocation Formula
+                    </div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: #166534;">
+                        Per stage EF = Total EF × (Per stage electricity / Total electricity)
+                    </div>
+                    <small style="color: #15803d; display: block; margin-top: 0.25rem;">
+                        Calculated proportionally using Total EF and Total Electricity established in the Production stage.
+                    </small>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Pre-treatment Processes & Chemicals -->
             <section class="card" id="sec-pretreatment">
                 <div class="card-header-styled">
-                <h2><span>Pre-treatment (Desizing, Scouring, Bleaching, Mercerizing)</span></h2>
-                <span class="badge-tag">Preparation</span>
-            </div>
-            <p class="section-desc">Chemical and thermal wet preparation of grey fabric prior to printing and dyeing. (Note: Electricity and water consumption for pre-treatment and dyeing are measured together once in the coloration section below).</p>
+                    <h2><span>Pre-treatment (Desizing, Scouring, Bleaching, Mercerizing)</span></h2>
+                    <span class="badge-tag">Preparation</span>
+                </div>
+                <p class="section-desc">Chemical wet preparation of grey fabric prior to printing and dyeing. (Note: Electricity and water consumption are configured in the utilities section above).</p>
 
-            <h3>Sub-processes Applied</h3>
-            <div class="checkbox-group">
-                <label class="checkbox-label"><input type="checkbox" id="chkDesizing" checked> Desizing</label>
-                <label class="checkbox-label"><input type="checkbox" id="chkScouring" checked> Scouring</label>
-                <label class="checkbox-label"><input type="checkbox" id="chkBleaching" checked> Bleaching</label>
-                <label class="checkbox-label"><input type="checkbox" id="chkMercerizing"> Mercerizing (Cotton)</label>
-            </div>
+                <h3>Sub-processes Applied</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-label"><input type="checkbox" id="chkDesizing" checked> Desizing</label>
+                    <label class="checkbox-label"><input type="checkbox" id="chkScouring" checked> Scouring</label>
+                    <label class="checkbox-label"><input type="checkbox" id="chkBleaching" checked> Bleaching</label>
+                    <label class="checkbox-label"><input type="checkbox" id="chkMercerizing"> Mercerizing (Cotton)</label>
+                </div>
 
-            <h3>Pre-treatment Chemicals</h3>
-            <div id="preChemContainer" class="chem-container"></div>
-            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('preChemContainer', 'preChem', { key: 'surfactant', qty: 10, ef: 2.0 })">
-                + Add Pre-treatment Chemical
-            </button>
-        </section>
+                <h3>Pre-treatment Chemicals</h3>
+                <div id="preChemContainer" class="chem-container"></div>
+                <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('preChemContainer', 'preChem', { key: 'surfactant', qty: 10, ef: 2.0 })">
+                    + Add Pre-treatment Chemical
+                </button>
+            </section>
 
-        <!-- STAGE: Dyeing -->
-        <section class="card" id="sec-dyeing">
-            <div class="card-header-styled">
-                <h2><span>Dyeing Process &amp; Wet Preparation Utilities</span></h2>
-                <span class="badge-tag badge-blue">Coloration &amp; Utilities</span>
-            </div>
-            <p class="section-desc">Exhaust, continuous pad, or cold pad batch coloration with dyes, electrolytes, and fixing alkalis. Includes single unified energy and water measurement for both pre-treatment and dyeing cycles.</p>
+            <!-- SECTION 3: Dyeing Process & Chemicals -->
+            <section class="card" id="sec-dyeing">
+                <div class="card-header-styled">
+                    <h2><span>Dyeing Process (Coloration)</span></h2>
+                    <span class="badge-tag badge-blue">Coloration</span>
+                </div>
+                <p class="section-desc">Exhaust, continuous pad, or cold pad batch coloration with dyes, electrolytes, and fixing alkalis.</p>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dyeMethod">Dyeing Methodology</label>
-                    <select id="dyeMethod">
-                        <option value="exhaust">Exhaust Dyeing (Jet / Soft-Flow / Jigger)</option>
-                        <option value="continuous">Continuous Dyeing (Pad-Dry-Cure / Thermosol)</option>
-                        <option value="cold_pad">Cold Pad Batch (Low Energy)</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dyeMethod">Dyeing Methodology</label>
+                        <select id="dyeMethod">
+                            <option value="exhaust">Exhaust Dyeing (Jet / Soft-Flow / Jigger)</option>
+                            <option value="continuous">Continuous Dyeing (Pad-Dry-Cure / Thermosol)</option>
+                            <option value="cold_pad">Cold Pad Batch (Low Energy)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeClass">Dye Class</label>
+                        <select id="dyeClass">
+                            <option value="reactive">Reactive Dyes (Cotton / Cellulosics)</option>
+                            <option value="disperse">Disperse Dyes (Polyester / Synthetics)</option>
+                            <option value="vat">Vat Dyes</option>
+                            <option value="direct">Direct Dyes</option>
+                            <option value="sulfur">Sulfur Dyes</option>
+                            <option value="pigment">Pigment</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="dyeClass">Dye Class</label>
-                    <select id="dyeClass">
-                        <option value="reactive">Reactive Dyes (Cotton / Cellulosics)</option>
-                        <option value="disperse">Disperse Dyes (Polyester / Synthetics)</option>
-                        <option value="vat">Vat Dyes</option>
-                        <option value="direct">Direct Dyes</option>
-                        <option value="sulfur">Sulfur Dyes</option>
-                        <option value="pigment">Pigment</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dyeLiquorRatio">Liquor Ratio (e.g. 8 for 1:8)</label>
-                    <input type="number" id="dyeLiquorRatio" value="8" min="1" step="0.5">
-                    <small>Lower liquor ratio significantly cuts water and steam demand</small>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dyeLiquorRatio">Liquor Ratio (e.g. 8 for 1:8)</label>
+                        <input type="number" id="dyeLiquorRatio" value="8" min="1" step="0.5">
+                        <small>Lower liquor ratio significantly cuts water and steam demand</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dyeNumWashes">After-Wash Cycles</label>
+                        <input type="number" id="dyeNumWashes" value="4" min="0" step="1">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="dyeNumWashes">After-Wash Cycles</label>
-                    <input type="number" id="dyeNumWashes" value="4" min="0" step="1">
-                </div>
-            </div>
 
-            <h3>Energy Requirements (Pre-treatment &amp; Dyeing Combined)</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dyeGridKwh">Grid Electricity (kWh)</label>
-                    <input type="number" id="dyeGridKwh" value="600" min="0" step="1">
-                    <small>Combined electricity for preparatory machinery and dyeing machines</small>
-                </div>
-                <div class="form-group">
-                    <label for="dyeGasKwh">Natural Gas / Thermal Energy (kWh)</label>
-                    <input type="number" id="dyeGasKwh" value="3000" min="0" step="1">
-                    <small>Combined process steam for desizing, scouring, bleaching, and dye bath heating</small>
-                </div>
-                <div class="form-group">
-                    <label for="dyeRenewableKwh">Renewable Electricity (kWh)</label>
-                    <input type="number" id="dyeRenewableKwh" value="0" min="0" step="1">
-                </div>
-            </div>
-
-            <h3>Water Consumption by Source (Pre-treatment &amp; Dyeing Combined)</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dyeWaterFresh">Freshwater (Municipal / Borewell) (L)</label>
-                    <input type="number" id="dyeWaterFresh" value="80000" min="0" step="1">
-                    <small>Combined freshwater for preparation baths, coloration, and after-washing</small>
-                </div>
-                <div class="form-group">
-                    <label for="dyeWaterRain">Harvested Rainwater (L)</label>
-                    <input type="number" id="dyeWaterRain" value="0" min="0" step="1">
-                </div>
-                <div class="form-group">
-                    <label for="dyeWaterRecycled">Recycled Water (L)</label>
-                    <input type="number" id="dyeWaterRecycled" value="0" min="0" step="1">
-                </div>
-            </div>
-
-            <h3>Dyes, Salts &amp; Auxiliary Chemicals</h3>
-            <div id="dyeChemContainer" class="chem-container"></div>
-            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('dyeChemContainer', 'dyeChem', { key: 'leveling_agent', qty: 10, ef: 2.5 })">
-                + Add Dye / Auxiliary Chemical
-            </button>
-        </section>
+                <h3>Dyes, Salts &amp; Auxiliary Chemicals</h3>
+                <div id="dyeChemContainer" class="chem-container"></div>
+                <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('dyeChemContainer', 'dyeChem', { key: 'leveling_agent', qty: 10, ef: 2.5 })">
+                    + Add Dye / Auxiliary Chemical
+                </button>
+            </section>
 
         <!-- STAGE: Finishing -->
         <section class="card" id="sec-finishing">
