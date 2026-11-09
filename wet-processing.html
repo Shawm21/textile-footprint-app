@@ -252,7 +252,13 @@
             </div>
             <p class="section-desc">Applying performance softeners, water-repellency, anti-crease, flame retardancy, and stenter curing.</p>
 
-            <h3>Energy Requirements</h3>
+            <h3>Functional Finishing Chemicals</h3>
+            <div id="finChemContainer" class="chem-container"></div>
+            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('finChemContainer', 'finChem', { key: 'water_repellent', qty: 15, ef: 8.5 })">
+                + Add Finishing Chemical
+            </button>
+
+            <h3 style="margin-top: 1.6rem;">Energy Requirements</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label for="finGridKwh">Grid Electricity (kWh)</label>
@@ -292,12 +298,6 @@
                     <input type="number" id="finWaterRecycled" value="0" min="0" step="1">
                 </div>
             </div>
-
-            <h3>Functional Finishing Chemicals</h3>
-            <div id="finChemContainer" class="chem-container"></div>
-            <button type="button" class="btn-add-chem" onclick="addChemRowToContainer('finChemContainer', 'finChem', { key: 'water_repellent', qty: 15, ef: 8.5 })">
-                + Add Finishing Chemical
-            </button>
         </section>
         </div>
 
